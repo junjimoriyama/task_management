@@ -1,0 +1,39 @@
+@mixin taskInputField() {
+	width: 100%;
+	height: 40px;
+	padding: 5px;
+	border: 2px solid #000;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+@mixin taskArea($background-color) {
+	width: 30%;
+	height: 100vh;
+	padding: 10px;
+	background-color: $background-color;
+	.heading {
+		display: flex;
+		justify-content: center;
+		gap: 20px;
+		margin-bottom: 20px;
+		position: relative;
+		.listName {
+		}
+		// menu
+		.fa-ellipsis {
+			position: relative;
+			top: 0;
+			right: -15px;
+			cursor: pointer;
+		}
+	}
+	.taskMenu {
+		display: flex;
+		justify-content: center;
+		background-color: #fff;
+		padding: 5px;
+		border-radius: 30px;
+		cursor: pointer;
+	}
+}

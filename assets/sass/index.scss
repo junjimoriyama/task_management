@@ -1,0 +1,28 @@
+@charset "utf8";
+
+@use "mixin" as mixin;
+
+body {
+	.container {
+		padding: 10px;
+		main {
+			.task {
+				display: flex;
+				justify-content: center;
+				gap: 10px;
+				.TodoArea {
+					@include mixin.taskArea(#e6ccb5)
+					// (rgba(100, 149, 237, 0.2));
+				}
+				.progressionArea {
+					@include mixin.taskArea(#baa896)
+					// (rgba(100, 237, 191, 0.2));
+				}
+				.completionArea {
+					@include mixin.taskArea(#e38b75);
+						// rgba(237, 100, 136, 0.2)
+				}
+			}
+		}
+	}
+}

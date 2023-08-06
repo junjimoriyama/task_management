@@ -1,0 +1,77 @@
+@charset "utf8";
+
+@use "mixin" as mixin;
+
+.taskSheet {
+	width: max(300px, 50vh);
+	height: 500px;
+	background-color: #fff;
+	border-radius: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	.closeSheet {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		.fa-rectangle-xmark {
+			font-size: 30px;
+			cursor: pointer;
+		}
+	}
+	.inputArea {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90%;
+		.sheetHeading {
+			font-size: 30px;
+			margin-bottom: 30px;
+		}
+		.taskTitle,
+		.taskDescription,
+		.taskPIC {
+			@include mixin.taskInputField();
+		}
+		.taskPeriod {
+			width: 100%;
+			height: 40px;
+			display: flex;
+			justify-content: center;
+			gap: 50px;
+			margin-bottom: 20px;
+
+			.taskPeriodStart,
+			.taskPeriodEnd {
+				border: 2px solid #000;
+				border-radius: 10px;
+			}
+		}
+		.addTaskSaveBtn {
+			font-size: 20px;
+			padding: 10px;
+			background-color: #335252;
+			color: #fff;
+			border-radius: 10px;
+		}
+	}
+}
+// tasksheetマスク
+.taskUnderMask {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.3;
+	z-index: 1;
+}
