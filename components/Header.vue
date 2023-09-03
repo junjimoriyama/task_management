@@ -1,5 +1,13 @@
 <script setup>
-
+// const addTask = () => {
+// 	const newTask = new TaskSheetClass(
+// 		taskID.value,
+// 		taskTitle.value,
+// 		taskDescription.value,
+// 		taskPeriod.value,
+// 		taskPIC.value
+// 	)
+// }
 </script>
 
 <template>

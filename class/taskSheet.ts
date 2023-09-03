@@ -1,16 +1,14 @@
-import { TaskSheet } from '../composables/common'
 
-
-// import { common, JobData} from '../composables/common'
-export class taskSheet {
+export class TaskSheetClass {
 	constructor(
 		public id: number,
 		public title: string,
 		public description: string,
 		public period: string,
 		public PIC: string,
-		public label?: string
-	) {}
+		public status: string
+		// public label?: string
+	) { }
 }
 
 // 引数はただのローカル変数でなく
@@ -21,27 +19,23 @@ export class taskSheet {
 // 引数として渡された値で初期化されます。
 // このシンタックスを使用すると、コンストラクタに渡された引数の値は、自動的に新しく作成されたクラスのプロパティに割り当てられます。
 
+// import { TaskSheet } from '../composables/common'
 
-// export class taskSheet {
-// 	id: number;
-// 	title: string;
-// 	description: string;
-// 	period: string;
-// 	PIC: string;
-// 	label?: string;
-// 	constructor(
-// 		id: number,
-// 		title: string,
-// 		description: string,
-// 		period: string,
-// 		PIC: string,
-// 		label?: string
-// 	) {
-// 		this.id = id;
-// 		this.title = title;
-// 		this.description = description;
-// 		this.period = period;
-// 		this.PIC = PIC;
-// 		this.label = label;
+// export type TaskList = {
+//   id: number,
+// 	title: string,
+// 	description: string,
+// 	period: string,
+// 	PIC: string,
+// 	status: 'todo' | 'inProgress' | 'done'
+// }
+
+// export function common() {
+// 	const STORAGE_TASKLIST = ref('taskList')
+// 	// const taskList: TaskList[] = reactive([])
+
+// 	return {
+// 		STORAGE_TASKLIST,
+// 		// taskList
 // 	}
 // }

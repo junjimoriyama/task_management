@@ -1,37 +1,49 @@
 <script setup lang="ts">
-import { common, TaskSheet } from '../composables/common'
+import { TaskList, taskList, taskListPushLocalStorage } from '../composables/common'
 import Header from '../components/Header.vue'
+import { isShowAddModal, changeShowAddModal } from '../composables/componentStatus'
 
-const { taskList } = common()
+// tasksheetの項目定義
+const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus} = taskDefinition()
 
-// const database:[] = reactive([])
+// 初めにlocalStorageからtaskListに入れる
+onMounted(() => {
+	taskListPushLocalStorage()
+})
 
-// tasksheet表示非表示
-const isSheetDisplay = ref(false)
+// taskListに変化があればlocalStorageに反映させる
+watch(taskList, () => {
+	localStorage.setItem(STORAGE_TASKLIST.value, JSON.stringify(taskList))
+})
+
 // tasksheet追加
 function addTask() {
-	isSheetDisplay.value = true
+	changeShowAddModal(true)
 }
-// tasksheet非表示
-function closeSheet() {
-	isSheetDisplay.value = false
+// ジェネリックス記法（型の変数化）
+const currentTask = ref<TaskList | null>(null)
+
+// task編集
+function editTask(editSelectedTask: TaskList) {
+currentTask.value = editSelectedTask
 }
+
+
 </script>
 
 <template>
 	<div>
 		<div class="container">
 			<Header />
-			<Sheet v-if="isSheetDisplay"
-			@close-sheet="closeSheet"
+			<SheetFormat v-if="isShowAddModal"
 			/>
-			<!-- @input-TaskTitle="inputTaskTitle" -->
+			<!-- @onEdit="editTask" -->
 			<main>
 				<div class="task">
 					<div class="TodoArea">
 						<div class="heading">
 							<div class="listName">Todoリスト<span class="countList">
-									1
+									{{ taskList.length }}
 								</span>
 							</div>
 							<div class="fa-solid fa-ellipsis"></div>
@@ -41,6 +53,11 @@ function closeSheet() {
 								タスクを追加
 							</div>
 						</div>
+						<ul class="TodoTaskLineup">
+							<TodoList 
+							@edit-task="editTask"
+							/>
+						</ul>
 					</div>
 					<div class="progressionArea">
 						<div class="heading">

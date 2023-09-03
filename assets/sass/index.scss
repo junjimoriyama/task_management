@@ -11,16 +11,116 @@ body {
 				justify-content: center;
 				gap: 10px;
 				.TodoArea {
-					@include mixin.taskArea(#e6ccb5)
-					// (rgba(100, 149, 237, 0.2));
+					@include mixin.taskArea(#e6ccb5);
+					.heading {
+						.listName {
+							.countList {
+							}
+						}
+						.fa-ellipsis {
+						}
+					}
+					.taskMenu {
+						margin-bottom: 20px;
+						.addTaskBtn {
+						}
+					}
+					.TodoTaskLineup {
+						.eachTask {
+							position: relative;
+							width: 100%;
+							height: auto;
+							background-color: #fff;
+							padding: 10px;
+							margin-bottom: 10px;
+							border-radius: 20px;
+							cursor: pointer;
+							.taskModify {
+								position: absolute;
+								top: 0;
+								right: 10px;
+								.taskModifyIcon {
+									display: block;
+									font-size: 24px;
+								}
+								.taskModifyMenu {
+									border: 1px solid #333;
+									border-radius: 10px;
+									padding: 5px;
+									width: 50px;
+									position: absolute;
+									top: 100%; 
+									right: 0; 
+									z-index: 1; 
+									li {
+										cursor: pointer;
+										&:hover {
+											opacity: 0.7;
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 				.progressionArea {
-					@include mixin.taskArea(#baa896)
-					// (rgba(100, 237, 191, 0.2));
+					@include mixin.taskArea(#baa896);
+					.heading {
+						.listName {
+							.countList {
+							}
+						}
+						.fa-ellipsis {
+						}
+					}
+					.taskMenu {
+						.addTaskBtn {
+						}
+					}
+					.Lineup {
+					}
 				}
+
 				.completionArea {
 					@include mixin.taskArea(#e38b75);
-						// rgba(237, 100, 136, 0.2)
+					// rgba(237, 100, 136, 0.2)
+				}
+			}
+			.saveModalMask {
+				position: fixed;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.2);
+				opacity: 0.5;
+				transition: 0.3s;
+				z-index: 1;
+			}
+			.saveModal {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 300px;
+				height: 100px;
+				background-color: #fff;
+				border: 2px solid #333;
+				border-radius: 20px;
+				z-index: 10;
+				.fa-rectangle-xmark {
+					position: absolute;
+					top: 10px;
+					right: 10px;
+					font-size: 30px;
+				}
+				p {
+					font-size: 24px;
 				}
 			}
 		}
