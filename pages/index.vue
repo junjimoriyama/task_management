@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { TaskList, taskList, taskListPushLocalStorage } from '../composables/common'
+// import { TaskList } from '../composables/taskList'
+import { STORAGE_TASKLIST, taskListPushLocalStorage } from '../composables/storage'
 import Header from '../components/Header.vue'
+import Sort from '../components/Sort.vue'
 import { isShowAddModal, changeShowAddModal } from '../composables/componentStatus'
+import { priorityOrder, changeSortPriority, changeSortDay, } from '../composables/sort'
+import { getSortValue } from '../composables/sort'
 
-// tasksheetの項目定義
-const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus} = taskDefinition()
+const { editTaskMode, isEditTask, currentSelectedTaskID } = useSharedEditTaskMode()
+
+// taskList(reactive)
+const { taskList } = taskDefinition()
+
+// sort.tsで定義
+const { sortPriority, sortDay, sortChanged } = getSortValue()
 
 // 初めにlocalStorageからtaskListに入れる
 onMounted(() => {
@@ -12,22 +21,36 @@ onMounted(() => {
 })
 
 // taskListに変化があればlocalStorageに反映させる
-watch(taskList, () => {
-	localStorage.setItem(STORAGE_TASKLIST.value, JSON.stringify(taskList))
-})
+watch(taskList.value, () => {
+	localStorage.setItem(STORAGE_TASKLIST.value, JSON.stringify
+	(taskList.value));
+});
 
+// 追加選択しているstatus
+const addStatus: Ref<string> = ref('');
 // tasksheet追加
-function addTask() {
-	changeShowAddModal(true)
-}
-// ジェネリックス記法（型の変数化）
-const currentTask = ref<TaskList | null>(null)
-
-// task編集
-function editTask(editSelectedTask: TaskList) {
-currentTask.value = editSelectedTask
+const addTask = (initialStatus: string) => {
+	changeShowAddModal(true);
 }
 
+// 各タスクの数を出す
+const taskStatusLength = (status: string) => {
+	return taskList.value.filter(task => task.status === status).length;
+}
+
+// 優先度順関数実行
+const onChangeSortPriority = (value: string) => {
+	sortPriority.value = value
+  changeSortPriority(sortPriority, sortChanged);
+	
+}
+// 日付順関数実行
+const onChangeSortDay = (value: string) => {
+	sortDay.value = value
+  changeSortDay(sortDay, sortChanged);
+}
+
+// watchで監視
 
 </script>
 
@@ -35,62 +58,79 @@ currentTask.value = editSelectedTask
 	<div>
 		<div class="container">
 			<Header />
-			<SheetFormat v-if="isShowAddModal"
+			<Sort 
+			@changeSortPriority="onChangeSortPriority"
+			@changeSortDay="onChangeSortDay"
 			/>
-			<!-- @onEdit="editTask" -->
+			<!-- <Sort 
+			@changeSortPriority="onChangeSortPriority"
+			@changeSortDay="onChangeSortDay"
+			/> -->
+			
+			<!-- <div class="sort">
+				<select class="sortPriority" v-model="sortPriority" @change="onChangeSortPriority">
+					<option value="toHigh">優先度が高い順</option>
+					<option value="toLow">優先度が低い順</option>
+				</select>
+				<select class="sortDay" v-model="sortDay" @change="onChangeSortDay">
+					<option value="close">日付が近い順</option>
+					<option value="far">日付が遠い順</option>
+				</select>
+			</div> -->
+			<SheetFormat v-if="isShowAddModal" :addStatus="addStatus" />
 			<main>
 				<div class="task">
 					<div class="TodoArea">
 						<div class="heading">
 							<div class="listName">Todoリスト<span class="countList">
-									{{ taskList.length }}
+									{{ taskStatusLength('Todo') }}
 								</span>
 							</div>
 							<div class="fa-solid fa-ellipsis"></div>
 						</div>
-						<div class="taskMenu" @click="addTask">
+						<div class="taskMenu" @click="addTask('Todo')">
 							<div class="addTaskBtn fa-regular fa-square-plus">
 								タスクを追加
 							</div>
 						</div>
-						<ul class="TodoTaskLineup">
-							<TodoList 
-							@edit-task="editTask"
-							/>
-						</ul>
+
+						<TodoList status="Todo" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
+							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
 					</div>
 					<div class="progressionArea">
 						<div class="heading">
 							<div class="listName">進行中リスト<span class="countList">
-									1
+									{{ taskStatusLength('進行中') }}
 								</span>
 							</div>
 							<div class="fa-solid fa-ellipsis"></div>
 						</div>
-						<div class="taskMenu" @click="addTask">
+						<div class="taskMenu" @click="addTask('進行中')">
 							<div class="addTaskBtn fa-regular fa-square-plus">
 								タスクを追加
 							</div>
 						</div>
+						<TodoList status="進行中" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
+							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
 					</div>
 					<div class="completionArea">
 						<div class="heading">
 							<div class="listName">完了リスト<span class="countList">
-									1
+									{{ taskStatusLength('完了') }}
 								</span>
 							</div>
 							<div class="fa-solid fa-ellipsis"></div>
 						</div>
-						<div class="taskMenu" @click="addTask">
+						<div class="taskMenu" @click="addTask('完了')">
 							<div class="addTaskBtn fa-regular fa-square-plus">
 								タスクを追加
 							</div>
 						</div>
+						<TodoList status="完了" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
+							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
 					</div>
 				</div>
 			</main>
 		</div>
 	</div>
 </template>
-
-<!-- npm install -g firebase-tools -->

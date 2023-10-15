@@ -1,0 +1,358 @@
+body {
+  font-family: "a-otf-ud-shin-maru-go-pr6n", sans-serif;
+  font-style: normal;
+  font-weight: 300;
+}
+body .container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.header {
+  background-color: #ffffff;
+  height: 50px;
+  width: 100%;
+}
+
+body .container {
+  padding: 10px;
+}
+body .container main .task {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+body .container main .task .TodoArea {
+  width: 30%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #e6ccb5;
+}
+body .container main .task .TodoArea .heading {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+body .container main .task .TodoArea .heading .fa-ellipsis {
+  position: relative;
+  top: 0;
+  right: -15px;
+  cursor: pointer;
+}
+body .container main .task .TodoArea .taskMenu {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+body .container main .task .TodoArea .taskMenu {
+  margin-bottom: 20px;
+}
+body .container main .task .TodoArea .TodoTaskLineup {
+  height: 100%;
+}
+body .container main .task .TodoArea .TodoTaskLineup .eachTask {
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+}
+body .container main .task .TodoArea .TodoTaskLineup .eachTask .taskModify {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+body .container main .task .TodoArea .TodoTaskLineup .eachTask .taskModify .taskModifyIcon {
+  display: block;
+  font-size: 24px;
+}
+body .container main .task .TodoArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu {
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 5px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+body .container main .task .TodoArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu li {
+  font-size: 30px;
+  cursor: pointer;
+}
+body .container main .task .TodoArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu li:hover {
+  opacity: 0.7;
+}
+body .container main .task .progressionArea {
+  width: 30%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #baa896;
+}
+body .container main .task .progressionArea .heading {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+body .container main .task .progressionArea .heading .fa-ellipsis {
+  position: relative;
+  top: 0;
+  right: -15px;
+  cursor: pointer;
+}
+body .container main .task .progressionArea .taskMenu {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+body .container main .task .progressionArea .taskMenu {
+  margin-bottom: 20px;
+}
+body .container main .task .progressionArea .TodoTaskLineup .eachTask {
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+}
+body .container main .task .progressionArea .TodoTaskLineup .eachTask .taskModify {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+body .container main .task .progressionArea .TodoTaskLineup .eachTask .taskModify .taskModifyIcon {
+  display: block;
+  font-size: 24px;
+}
+body .container main .task .progressionArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu {
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 5px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+body .container main .task .progressionArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu li {
+  font-size: 30px;
+  cursor: pointer;
+}
+body .container main .task .progressionArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu li:hover {
+  opacity: 0.7;
+}
+body .container main .task .completionArea {
+  width: 30%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #e38b75;
+}
+body .container main .task .completionArea .heading {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+body .container main .task .completionArea .heading .fa-ellipsis {
+  position: relative;
+  top: 0;
+  right: -15px;
+  cursor: pointer;
+}
+body .container main .task .completionArea .taskMenu {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+body .container main .task .completionArea .taskMenu {
+  margin-bottom: 20px;
+}
+body .container main .task .completionArea .TodoTaskLineup .eachTask {
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+}
+body .container main .task .completionArea .TodoTaskLineup .eachTask .taskModify {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+body .container main .task .completionArea .TodoTaskLineup .eachTask .taskModify .taskModifyIcon {
+  display: block;
+  font-size: 24px;
+}
+body .container main .task .completionArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu {
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 5px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+body .container main .task .completionArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu li {
+  font-size: 30px;
+  cursor: pointer;
+}
+body .container main .task .completionArea .TodoTaskLineup .eachTask .taskModify .taskModifyMenu li:hover {
+  opacity: 0.7;
+}
+body .container .saveModalMask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+  transition: 0.3s;
+  z-index: 1;
+}
+body .container .saveModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 20px;
+  z-index: 10;
+}
+body .container .saveModal .fa-rectangle-xmark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+}
+body .container .saveModal p {
+  font-size: 24px;
+}
+
+.taskSheet {
+  width: max(300px, 50vh);
+  height: 500px;
+  background-color: #fff;
+  border-radius: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.taskSheet .closeSheet {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.taskSheet .closeSheet .fa-rectangle-xmark {
+  font-size: 30px;
+  cursor: pointer;
+}
+.taskSheet .inputArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+}
+.taskSheet .inputArea .sheetHeading {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+.taskSheet .inputArea .taskTitle,
+.taskSheet .inputArea .taskDescription,
+.taskSheet .inputArea .taskPIC {
+  width: 100%;
+  height: 40px;
+  padding: 5px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.taskSheet .inputArea .taskPeriod {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 20px;
+}
+.taskSheet .inputArea .taskPeriod .taskPeriodStart,
+.taskSheet .inputArea .taskPeriod .taskPeriodEnd {
+  border: 2px solid #000;
+  border-radius: 10px;
+}
+.taskSheet .inputArea .taskStatus select {
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.taskSheet .inputArea .priority select {
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 5px;
+}
+.taskSheet .inputArea .addTaskSaveBtn {
+  position: absolute;
+  right: 10px;
+  bottom: -30px;
+  font-size: 20px;
+  padding: 10px;
+  background-color: #335252;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.taskUnderMask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.3;
+  z-index: 1;
+}/*# sourceMappingURL=style.css.map */

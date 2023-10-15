@@ -1,17 +1,41 @@
-@charset "utf8";
-
 @use "mixin" as mixin;
 
 body {
 	.container {
 		padding: 10px;
+		.sort {
+			@include mixin.sortStyle()
+		}
+	
 		main {
 			.task {
 				display: flex;
-				justify-content: center;
+				justify-content: space-evenly;
 				gap: 10px;
 				.TodoArea {
-					@include mixin.taskArea(#e6ccb5);
+					@include mixin.taskArea(#7ca5f6);
+					.heading {
+						.listName {
+							.countList {
+							}
+						}
+						.fa-ellipsis {
+						}
+					}
+					.taskMenu {
+						margin-bottom: 20px;
+						.addTaskBtn {
+						}
+					}
+					.TodoTaskLineup {
+						height: 100%;
+						.eachTask {
+							@include mixin.eachTask();
+						}
+					}
+				}
+				.progressionArea {
+					@include mixin.taskArea(#32cd92);
 					.heading {
 						.listName {
 							.countList {
@@ -27,44 +51,15 @@ body {
 					}
 					.TodoTaskLineup {
 						.eachTask {
-							position: relative;
-							width: 100%;
-							height: auto;
-							background-color: #fff;
-							padding: 10px;
-							margin-bottom: 10px;
-							border-radius: 20px;
-							cursor: pointer;
-							.taskModify {
-								position: absolute;
-								top: 0;
-								right: 10px;
-								.taskModifyIcon {
-									display: block;
-									font-size: 24px;
-								}
-								.taskModifyMenu {
-									border: 1px solid #333;
-									border-radius: 10px;
-									padding: 5px;
-									width: 50px;
-									position: absolute;
-									top: 100%; 
-									right: 0; 
-									z-index: 1; 
-									li {
-										cursor: pointer;
-										&:hover {
-											opacity: 0.7;
-										}
-									}
-								}
-							}
+							@include mixin.eachTask();
 						}
 					}
+					.Lineup {
+					}
 				}
-				.progressionArea {
-					@include mixin.taskArea(#baa896);
+
+				.completionArea {
+					@include mixin.taskArea(#dc632b);
 					.heading {
 						.listName {
 							.countList {
@@ -74,16 +69,18 @@ body {
 						}
 					}
 					.taskMenu {
+						margin-bottom: 20px;
 						.addTaskBtn {
+						}
+					}
+					.TodoTaskLineup {
+						.eachTask {
+							@include mixin.eachTask();
 						}
 					}
 					.Lineup {
 					}
 				}
-
-				.completionArea {
-					@include mixin.taskArea(#e38b75);
-					// rgba(237, 100, 136, 0.2)
 				}
 			}
 			.saveModalMask {
@@ -125,4 +122,4 @@ body {
 			}
 		}
 	}
-}
+

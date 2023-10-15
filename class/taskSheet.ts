@@ -6,7 +6,8 @@ export class TaskSheetClass {
 		public description: string,
 		public period: string,
 		public PIC: string,
-		public status: string
+		public status: string,
+		public priority: string
 		// public label?: string
 	) { }
 }

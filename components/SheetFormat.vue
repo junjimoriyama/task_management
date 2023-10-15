@@ -1,34 +1,72 @@
 <script setup lang="ts">
-import { taskDefinition, TaskList, taskList, STORAGE_TASKLIST, localStorageData } from '../composables/common'
+import { taskDefinition, TaskList } from '../composables/taskList'
 import { TaskSheetClass } from '../class/taskSheet'
 import { isShowAddModal, changeShowAddModal } from '../composables/componentStatus'
-import { isEditTask, editTaskMode, currentSelectedTaskID } from '../composables/task'
-import { useSharedCounter } from '../composables/counter'
+import { useSharedEditTaskMode } from '../composables/taskState'
 
+const { isEditTask,currentSelectedTaskID } = useSharedEditTaskMode()
 
-const { counter, inc, dec } = useSharedCounter()
-onMounted(() => { console.log(counter.value) })
+const { taskList } = taskDefinition()
 
 // tasksheetの項目定義
-const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus } = taskDefinition()
-
-const ids = taskList.map(task => task.id);
-const maxID = ref(Math.max(...ids));
+const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority } = taskDefinition()
 
 
+const maxId = ref(0)
+if (taskList.value.length > 0) {
+	const ids = taskList.value.map(task => task.id)
+	// 抽出したidの最大値を変数化
+	maxId.value = Math.max(...ids) + 1
+} else {
+	maxId.value + 1
+}
+
+// 選択しているタスクを定義(オブジェクト)
+const selectEditTask = taskList.value.find(task => task.id === currentSelectedTaskID.value)
+
+// 各input要素に現在選択している情報を入れる
+if (selectEditTask) {
+	// idはHTML内で+1されているの
+	maxId.value = selectEditTask.id
+	taskTitle.value = selectEditTask.title
+	taskDescription.value = selectEditTask.description
+	const [start, end] = selectEditTask.period.split(' 〜 ')
+	taskPeriodStart.value = start
+	taskPeriodEnd.value = end
+	taskPIC.value = selectEditTask.PIC
+	taskStatus.value = selectEditTask.status
+	taskPriority.value = selectEditTask.priority
+}
+
+// 保存ボタン押した場合
 function addTaskSave() {
-	const newTask = new TaskSheetClass(
-		maxID.value + 1,
-		taskTitle.value,
-		taskDescription.value,
-		taskPeriod.value,
-		taskPIC.value,
-		taskStatus.value
-	)
-	taskList.push(newTask)
-	// localStorageにはtaskListが入る
-	localStorage.setItem(STORAGE_TASKLIST.value, JSON.stringify(taskList))
-	// シートを閉じる
+	// 編集モードでない場合(新しいデータを追加)
+	if (!isEditTask.value) {
+		// 新しいタスクを作成して追加
+		const newTask = new TaskSheetClass(
+			maxId.value + 1,
+			taskTitle.value,
+			taskDescription.value,
+			taskPeriod.value,
+			taskPIC.value,
+			taskStatus.value,
+			taskPriority.value,
+		)
+		taskList.value.push(newTask)
+		// 編集モードの場合(選択しているデータを変更)
+	} else {
+		
+		if (selectEditTask && isEditTask.value) {
+			// input要素にあるデータを選択しているデータの値とする
+			selectEditTask.title = taskTitle.value
+			selectEditTask.description = taskDescription.value
+			selectEditTask.period = taskPeriod.value
+			selectEditTask.PIC = taskPIC.value
+			selectEditTask.status = taskStatus.value
+			selectEditTask.priority = taskPriority.value
+		}
+	}
+	// モーダル閉じる
 	changeShowAddModal(false)
 }
 
@@ -37,27 +75,22 @@ function closeSheet() {
 	changeShowAddModal(false)
 }
 
-console.log(editTaskMode)
+const props = defineProps([
+'addStatus'
+]);
 
-watch(editTaskMode, () => {
-	console.log(editTaskMode)
-})
 
 </script>
 
 <template>
 	<div class="taskSheet">
-
-		カウンター: {{ counter }}
-    <button @click="inc"> + </button>
-    <button @click="dec"> - </button>
 		<div class="closeSheet" v-if="isShowAddModal">
 			<i class="fa-regular fa-rectangle-xmark" @click="closeSheet"></i>
 		</div>
 		<div class="inputArea">
 			<p class="sheetHeading">タスクシート</p>
 			<div class="inputTaskId"></div>
-			<div class="inputID">{{ maxID + 1 }}</div>
+			<div class="inputID">{{ maxId }}</div>
 			<!-- タイトル -->
 			<input class="taskTitle" type="text" v-model="taskTitle" placeholder="タイトル">
 			<!-- 説明 -->
@@ -66,20 +99,36 @@ watch(editTaskMode, () => {
 			<input class="taskPIC" type="text" v-model="taskPIC" placeholder="担当者">
 			<!-- 期間 -->
 			<div class="taskPeriod">
-				<input class="taskPeriodStart" type="date" v-model="taskPeriodStart">~
+				<input class="taskPeriodStart" type="date" v-model="taskPeriodStart">
+				から
 				<input class="taskPeriodEnd" type="date" v-model="taskPeriodEnd">
 			</div>
-			<div class="taskStatus">
-				<select name="" id="" v-model="taskStatus">
-					<option value="todo">Todoリスト</option>
-					<option value="inProgress">進行中</option>
-					<option value="done">完了</option>
+			<!-- 状態 -->
+			<div class="taskStatus" >
+				<select name="" id="" v-model="taskStatus"
+				>
+				<option 
+			v-for="status in ['Todo', '進行中', '完了']" 
+			:value="status"
+			>
+			<!-- :selected="status === addStatus" -->
+			{{ status }}
+		</option>
 				</select>
 			</div>
+			<!-- 優先度 -->
+			<div class="priority">
+				<select name="" id="" v-model="taskPriority">
+					<!-- <option>優先度</option> -->
+					<option value="高">優先度「高」</option>
+					<option value="中">優先度「中」</option>
+					<option value="低" selected>優先度「低」</option>
+				</select>
+			</div>
+
 			<button class="addTaskSaveBtn" @click="addTaskSave">保存
 			</button>
 		</div>
 	</div>
 	<div class="taskUnderMask"></div>
 </template>
-

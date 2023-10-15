@@ -1,0 +1,144 @@
+@use "mixin" as mixin;
+
+.container {
+  .sort {
+    @include mixin.sortStyle()
+  }
+  .taskGantt {
+    display: flex;
+
+    .taskZorn {
+      margin: 5px;
+
+      .taskHeading {
+        display: grid;
+        grid-template-columns: (100px 50px 150px 60px 50px);
+        grid-gap: 3px;
+        color: #fff;
+        align-items: center;
+        justify-items: center;
+
+        .taskTitle,
+        .taskDescription,
+        .taskPIC,
+        .taskPeriod,
+        .taskStatus,
+        .taskPriority {
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          background-color: #999;
+          width: 100%;
+          height: 67px;
+        }
+      }
+
+      .taskItem {
+        position: relative;
+        display: grid;
+        place-items: center;
+        grid-template-columns: (100px 50px 150px 60px 50px);
+        border-radius: 10px;
+        grid-gap: 3px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        .taskTitle,
+        .taskDescription,
+        .taskPIC,
+        .taskPeriod,
+        .taskStatus,
+        .taskPriority {
+          overflow-wrap: break-word;
+          height: 70px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 10px;
+        }
+
+        .taskPriority {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          color: #fff;
+          border: 1px solid #000;
+        }
+
+
+        .block {
+          background-color: #524f3e;
+          width: 100px;
+          height: 30px;
+          border-radius: 30px;
+          position: absolute;
+          top: 50%;
+          right: 0;
+          translate: 100% -50%;
+          cursor: pointer;
+          // width: 100%;
+          // height: 100vh;
+          // border-top: 1px solid #ccc;
+        }
+
+        .activePeriod {
+          background-color: rgb(232, 246, 182);
+        }
+      }
+    }
+
+    .calendarZorn {
+      .month {
+        background-color: #F7F7F7;
+        display: flex;
+
+        .monthItem {
+          border-right: 1px solid #ccc;
+          padding-top: 10px;
+        }
+      }
+
+      .day {
+        display: flex;
+        text-align: center;
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        user-select: none;
+
+        .dayItem {
+          width: 30px;
+          border-right: 1px solid #ccc;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          &:last-of-type {
+            border-right: none;
+          }
+
+          .calendarBlock {
+            width: 100%;
+            height: 100vh;
+            border-top: 1px solid #ccc;
+          }
+        }
+
+        .saturday {
+          background-color: aliceblue;
+        }
+
+        .sunday {
+          background-color: #fbdadf;
+        }
+
+        .today {
+          border: 2px solid rgb(231, 77, 77);
+        }
+
+
+      }
+    }
+  }
+}
