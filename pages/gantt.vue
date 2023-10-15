@@ -193,9 +193,18 @@ const mousedown = (e: MouseEvent, index: number) => {
   // 伸ばす要素の右端の座標
   const adjustElRectRight = adjustElRect.right
 
+  const isRight = adjustElRectRight - clickX < 20
+  const isLeft = adjustElRectLeft - clickX < 20
+
+  if(isRight) {
+
+  }else if(isLeft) {
+    
+  }
+
   // チャートサイズを調整する関数
   const adjustElSize = (e: MouseEvent) => {
-
+    
     // 現在の座標
     const currentX = e.clientX
     // 移動した距離
@@ -221,12 +230,12 @@ const mousedown = (e: MouseEvent, index: number) => {
     }
   }
 
+  
   // 要素の右側20px範囲内をclickすると
-  if (adjustElRectRight - clickX < 20) {
-
+  if (isRight) {
+    
     window.addEventListener('mousemove', adjustElSize)
-
-    window.addEventListener('mouseup', () => {
+    const mouseupEvent = () => {
       // taskPeriodEnd.value = adjustEndDateStr
       adjustEndDateStr(newEndDateStr);
       // HTMLのstatusSortDataに反映させる
@@ -234,8 +243,10 @@ const mousedown = (e: MouseEvent, index: number) => {
       // ポインターの変更
       adjustEl.style.cursor = 'pointer'
       window.removeEventListener('mousemove', adjustElSize)
-    })
-  } else if (adjustElRectLeft - clickX < 20) {
+      window.removeEventListener('mouseup', mouseupEvent)
+    }
+    window.addEventListener('mouseup', mouseupEvent )
+  } else if (isLeft) {
 
   }
 }
