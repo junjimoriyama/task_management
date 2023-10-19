@@ -75,31 +75,6 @@ export function taskDefinition() {
 	}
 }
 
-// export function useTaskPeriod() {
-
-// 	// const adjustEndDateStr = (newEndDate: string) => {
-//   //   taskPeriodEnd.value = newEndDate;
-//   // };
-
-//   return {
-//     taskPeriodEnd,
-//     adjustEndDateStr
-//   }
-// }
-
-// export function useTaskPeriod() {
-
-// 	const adjustEndDateStr = (newEndDate: string) => {
-//     taskPeriodEnd.value = newEndDate;
-//   };
-
-//   return {
-//     taskPeriodEnd,
-//     adjustEndDateStr
-//   }
-// }
-
-// ========================================================
 // let newEndDateStr: string
 
 // const mousedown = (e: MouseEvent, index: number) => {
@@ -116,83 +91,76 @@ export function taskDefinition() {
 //   // 伸ばす要素の右端の座標
 //   const adjustElRectRight = adjustElRect.right
 
-
-//   // 現在の座標
-//   const currentX = e.clientX
-//   // 期間の開始日
-//   const adjustStartDate = new Date(taskList.value[index].period.split(' 〜 ')[0])
-//   // 期間の終了日
-//   const adjustEndDate = new Date(taskList.value[index].period.split(' 〜 ')[1])
-
-//   /* 右側の値 =========================================================== */
-//   //右側に移動した距離
-//   const moveXSizeRight = currentX - adjustElRectRight
-//   // 距離を切り上げブロック数で計算する
-//   const numberOfBlockRight = Math.ceil(moveXSizeRight / BLOCK_SIZE)
-//   console.log(numberOfBlockRight)
-//   // 右側に伸ばす距離(BLOCK_SIZEごと)
-//   const adjustSizeRight = adjustElRect.width + (numberOfBlockRight * BLOCK_SIZE)
-// console.log(currentX, adjustElRectRight)
-//   // console.log(moveXSizeRight, numberOfBlockRight, adjustSizeRight)
-
-//   /* 左側の値 =========================================================== */
-//   //左側に移動した距離
-//   const moveXSizeLeft = currentX - adjustElRectLeft
-//   // 距離を切り上げブロック数で計算する
-//   const numberOfBlockLeft = Math.ceil(moveXSizeLeft / BLOCK_SIZE)
-//   // 左側に伸ばす距離(BLOCK_SIZEごと)
-//   const adjustSizeLeft = adjustElRect.width - (numberOfBlockLeft * BLOCK_SIZE)
+//   // 右側20pxでのmouseイベント
+//   const isRight = adjustElRectRight - clickX < 20
+//   // 左側20pxでのmouseイベント
+//   const isLeft = adjustElRectLeft - clickX < 20
 
 
-//   // 左側にチャートサイズを調整する関数 =======================================
-//   const adjustElSizeLeft = (e: MouseEvent) => {
-//     // 終了日をnumberOfBlockLeftに合わせ1日ずつ増やす
-//     adjustEndDate.setDate(adjustEndDate.getDate() + numberOfBlockLeft);
-//     // 新しい終了日が開始日より後であることを確認
-//     if (adjustStartDate >= adjustEndDate) {
+//   // チャートサイズを調整する関数
+//   const adjustElSize = (e: MouseEvent, side: number, isLeft: boolean) => {
+//     // 現在の座標
+//     const currentX = e.clientX
+//     // 移動した距離
+//     const moveXSize = currentX - side
+//     // 距離を切り上げブロック数で計算する
+//     const numberOfBlock = Math.ceil(moveXSize / BLOCK_SIZE)
+//     // 伸ばす距離(BLOCK_SIZEごと)
+//     const adjustSize = adjustElRect.width + (numberOfBlock * BLOCK_SIZE)
+//     // 期間の終了日
+//     const adjustStartDate = new Date(taskList.value[index].period.split(' 〜 ')[0])
+//     const adjustEndDate = new Date(taskList.value[index].period.split(' 〜 ')[1])
+
+//     if(isLeft) {
+//       adjustStartDate.setDate(adjustStartDate.getDate() - numberOfBlock)
+//     } else {
+//       // 終了日をnumberOfBlockに合わせ1日ずつ増やす
+//       adjustEndDate.setDate(adjustEndDate.getDate() + numberOfBlock);
+//     }
+    
+//     if(adjustStartDate < adjustEndDate) {
 //       // -の文字列に変更
 //       newEndDateStr = `${adjustEndDate.getFullYear()}-${String(adjustEndDate.getMonth() + 1).padStart(2, '0')}-${String(adjustEndDate.getDate()).padStart(2, '0')}`;
 //     }
+
 //     // BLOCK_SIZEを１つ分は確保
-//     if (adjustSizeLeft >= BLOCK_SIZE) {
+//     if (adjustSize >= BLOCK_SIZE) {
 //       // チャートの幅を変更
-//       adjustEl.style.width = `${adjustSizeLeft}px`
+//       adjustEl.style.width = `${adjustSize}px`
+//     } else if (adjustSize < BLOCK_SIZE){
+
 //     }
 //   }
 
-//   // 右側にチャートサイズを調整する関数 =======================================
-//   const adjustElSizeRight = (e: MouseEvent) => {
-//     console.log(adjustEndDate)
-//     // 終了日をnumberOfBlockRightに合わせ1日ずつ増やす
-//     adjustEndDate.setDate(adjustEndDate.getDate() + numberOfBlockRight);
-//     // 新しい終了日が開始日より後であることを確認
-//     if (adjustEndDate >= adjustStartDate) {
-//       // -の文字列に変更
-//       newEndDateStr = `${adjustEndDate.getFullYear()}-${String(adjustEndDate.getMonth() + 1).padStart(2, '0')}-${String(adjustEndDate.getDate()).padStart(2, '0')}`;
-//     }
-//     // BLOCK_SIZEを１つ分は確保
-//     if (adjustSizeRight >= BLOCK_SIZE) {
-//       // チャートの幅を変更
-//       adjustEl.style.width = `${adjustSizeRight}px`
-//       console.log(adjustEl.style.width)
-//     }
-//   }
-
+  
 //   // 要素の右側20px範囲内をclickすると
-//   if (adjustElRectRight - clickX < 20) {
-
-//     window.addEventListener('mousemove', adjustElSizeRight)
-
-//     window.addEventListener('mouseup', () => {
-//       // taskPeriodEnd.value = adjustEndDateStr
+//   if (isRight) {
+//     const mouseMoveEventRight = (e: MouseEvent) => adjustElSize(e, adjustElRectRight, true)
+//     // window.addEventListener('mousemove', (e) => adjustElSize(e, adjustElRectRight))
+//     const mouseupEvent = () => {
 //       adjustEndDateStr(newEndDateStr);
 //       // HTMLのstatusSortDataに反映させる
 //       statusSortData.value[index].period = taskPeriod.value
 //       // ポインターの変更
 //       adjustEl.style.cursor = 'pointer'
-//       window.removeEventListener('mousemove', adjustElSizeRight)
-//     })
-//   } else if (adjustElRectLeft - clickX < 20) {
-//     console.log('left')
+//       // mousemoveイベント削除
+//       window.removeEventListener('mousemove',mouseMoveEventRight )
+//       // mouseupイベント削除
+//       window.removeEventListener('mouseup', mouseupEvent)
+//     }
+//     // mousemoveイベント追加
+//     window.addEventListener('mousemove', mouseMoveEventRight)
+//     // mouseupイベント追加
+//     window.addEventListener('mouseup', mouseupEvent)
+//   } else if (isLeft) {
+//     const mouseMoveEventLeft = (e: MouseEvent) => adjustElSize(e, adjustElRectLeft, true)
+//   const mouseupEvent = () => {
+//     adjustEndDateStr(newEndDateStr);
+//     // ...
+//     window.removeEventListener('mousemove', mouseMoveEventLeft)
+//     window.removeEventListener('mouseup', mouseupEvent)
+//   }
+//   window.addEventListener('mousemove', mouseMoveEventLeft)
+//   window.addEventListener('mouseup', mouseupEvent)
 //   }
 // }
