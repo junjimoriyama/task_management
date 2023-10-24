@@ -42,22 +42,6 @@ export function taskDefinition() {
 	const adjustStartDateStr = (newStartDate: string) => {
 		taskPeriodEnd.value = newStartDate;
 	}
-
-	// 日付を「/」表記にする関数
-	// function formatData(dataStr: string) {
-	// 	// YYYY-MM-DDの表記それぞれを変数へ
-	// 	const [year, month, day] = dataStr.split('-')
-	// 	// 日付を整数表示へ
-	// 	return `${year}-${parseInt(month)}-${parseInt(day)}`
-	// }
-
-	
-
-	// const changeTaskPeriod = (taskIndex: number, newStart: string, newEnd: string) => {
-	// 	taskList.value[taskIndex].taskPeriodStart = newStart;
-	// 	taskList.value[taskIndex].taskPeriodEnd = newEnd;
-	// };
-	
 	return {
 		taskList,
 		changeTaskListData,
