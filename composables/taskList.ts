@@ -9,6 +9,7 @@ export type TaskList = {
 	PIC: string,
 	status: string,
 	priority: string,
+	member: string
 	// color: string
 }
 
@@ -26,7 +27,7 @@ export function taskDefinition() {
 	const taskDescription = ref('')
 	const taskPIC = ref('')
 	// メソッドで書き変えるにはuseStateが必要
-	const taskPeriodStart = useState('taskPeriodStart', () => '2023-10-01')
+	const taskPeriodStart = useState('taskPeriodStart', () => '2023-10-02')
 	const taskPeriodEnd = useState('taskPeriodEnd', () => '2023-10-31')
 	const taskPeriod = computed(() => {
 		return `${taskPeriodStart.value} 〜 ${taskPeriodEnd.value}`
@@ -40,7 +41,7 @@ export function taskDefinition() {
   };
 
 	const adjustStartDateStr = (newStartDate: string) => {
-		taskPeriodEnd.value = newStartDate;
+		taskPeriodStart.value = newStartDate;
 	}
 	return {
 		taskList,
@@ -53,7 +54,8 @@ export function taskDefinition() {
 		taskPeriod,
 		taskStatus,
 		taskPriority,
-		adjustEndDateStr
+		adjustEndDateStr,
+		adjustStartDateStr
 		// changeTaskPeriod
 		// getPriorityColor
 	}

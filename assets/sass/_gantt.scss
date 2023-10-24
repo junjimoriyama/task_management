@@ -95,6 +95,10 @@
         .monthItem {
           border-right: 1px solid #ccc;
           padding-top: 10px;
+
+          #text {
+            user-select: none;
+          }
         }
       }
 
