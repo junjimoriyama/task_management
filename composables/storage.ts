@@ -3,9 +3,6 @@ const { taskList } = taskDefinition()
 // localStorageのkey
 export const STORAGE_TASKLIST = ref('TaskList')
 
-// localStorageの箱
-// export const localStorageData = localStorage.getItem(STORAGE_TASKLIST.value)
-
 // localStorageをtaskListに入れる
 export function taskListPushLocalStorage() {
 	const localStorageData = localStorage.getItem(STORAGE_TASKLIST.value)

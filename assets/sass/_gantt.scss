@@ -1,6 +1,7 @@
 @use "mixin" as mixin;
 
 .container {
+  user-select: none;
   .sort {
     @include mixin.sortStyle()
   }
@@ -9,6 +10,8 @@
 
     .taskZorn {
       margin: 5px;
+      // position: sticky;
+      // left: 0;
 
       .taskHeading {
         display: grid;
@@ -43,12 +46,7 @@
         margin-top: 5px;
         margin-bottom: 5px;
 
-        .taskTitle,
-        .taskDescription,
-        .taskPIC,
-        .taskPeriod,
-        .taskStatus,
-        .taskPriority {
+        li:not(.block) {
           overflow-wrap: break-word;
           height: 70px;
           display: flex;
@@ -57,7 +55,7 @@
           padding: 10px;
         }
 
-        .taskPriority {
+        @at-root #__nuxt & .taskPriority {
           width: 30px;
           height: 30px;
           border-radius: 50%;
@@ -76,9 +74,6 @@
           right: 0;
           translate: 100% -50%;
           cursor: pointer;
-          // width: 100%;
-          // height: 100vh;
-          // border-top: 1px solid #ccc;
         }
 
         .activePeriod {
@@ -95,10 +90,6 @@
         .monthItem {
           border-right: 1px solid #ccc;
           padding-top: 10px;
-
-          #text {
-            user-select: none;
-          }
         }
       }
 
@@ -108,7 +99,6 @@
         color: #000;
         background-color: #fff;
         border: 1px solid #ccc;
-        user-select: none;
 
         .dayItem {
           width: 30px;

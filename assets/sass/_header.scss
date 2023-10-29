@@ -14,11 +14,55 @@ header {
         cursor: pointer;
       }
     }
+
     .gantt {
       .fa-chart-gantt {
         font-size: 30px;
         cursor: pointer;
       }
+    }
+
+    .myAccount {
+      .fa-user {
+        font-size: 30px;
+        cursor: pointer;
+      }
+    }
+
+    .search {
+      position: relative;
+      display: flex;
+      gap: 10px;
+
+      input {
+        border: 2px solid #000;
+        border-radius: 10px;
+        padding: 5px;
+      }
+
+      :focus {
+        outline: none;
+      }
+      .fa-magnifying-glass {
+        position: absolute;
+        right: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 16px;
+        /* アイコンのサイズを調整 */
+      }
+    }
+    .searchBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #000;
+      padding: 5px;
+      border-radius: 5px;
+      color: #ffffff;
+      background-color: #333;
+      cursor: pointer;
     }
   }
 }

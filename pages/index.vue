@@ -4,8 +4,11 @@ import { STORAGE_TASKLIST, taskListPushLocalStorage } from '../composables/stora
 import Header from '../components/Header.vue'
 import Sort from '../components/Sort.vue'
 import { isShowAddModal, changeShowAddModal } from '../composables/componentStatus'
-import { priorityOrder, changeSortPriority, changeSortDay, } from '../composables/sort'
+import { changeSortPriority, changeSortDay, } from '../composables/sort'
 import { getSortValue } from '../composables/sort'
+// import { profileData } from '../composables/profile'
+
+// const { profileName, profileEmail, changeProfileName, changeProfileEmail } = profileData()
 
 const { editTaskMode, isEditTask, currentSelectedTaskID } = useSharedEditTaskMode()
 
@@ -23,8 +26,34 @@ onMounted(() => {
 // taskListに変化があればlocalStorageに反映させる
 watch(taskList.value, () => {
 	localStorage.setItem(STORAGE_TASKLIST.value, JSON.stringify
-	(taskList.value));
+		(taskList.value));
 });
+
+// const isSearch = ref(true)
+
+// キーワード検索行う
+const searchForWords = (word: string) => {
+	// .highlightのタグを定義し取得。
+	document.querySelectorAll('.highlight').forEach(span => {
+		// spanタグ消す
+		span.outerHTML = span.innerHTML
+	});
+
+	// 全ての要素定義
+	const allElement = document.querySelectorAll('*');
+	// 全ての要素取得
+	allElement.forEach(el => {
+		// HTML要素であれば
+		if (el instanceof HTMLElement) {
+			// 要素全体から該当する引数の検索
+			const regs = new RegExp(word, 'g');
+			// 該当する要素のスタイル変更
+			const heighlightHTML = el.innerHTML.replace(regs, match => `<span class="highlight" style="background-color: yellow">${match}</span>`);
+			// 新しいHTMLを組み込む
+			el.innerHTML = heighlightHTML;
+		}
+	});
+};
 
 // 追加選択しているstatus
 const addStatus: Ref<string> = ref('');
@@ -41,43 +70,29 @@ const taskStatusLength = (status: string) => {
 // 優先度順関数実行
 const onChangeSortPriority = (value: string) => {
 	sortPriority.value = value
-  changeSortPriority(sortPriority, sortChanged);
-	
+	changeSortPriority(sortPriority, sortChanged);
+
 }
 // 日付順関数実行
 const onChangeSortDay = (value: string) => {
 	sortDay.value = value
-  changeSortDay(sortDay, sortChanged);
+	changeSortDay(sortDay, sortChanged);
 }
 
-// watchで監視
+
 
 </script>
 
 <template>
 	<div>
 		<div class="container">
-			<Header />
-			<Sort 
-			@changeSortPriority="onChangeSortPriority"
-			@changeSortDay="onChangeSortDay"
-			/>
-			<!-- <Sort 
-			@changeSortPriority="onChangeSortPriority"
-			@changeSortDay="onChangeSortDay"
-			/> -->
-			
-			<!-- <div class="sort">
-				<select class="sortPriority" v-model="sortPriority" @change="onChangeSortPriority">
-					<option value="toHigh">優先度が高い順</option>
-					<option value="toLow">優先度が低い順</option>
-				</select>
-				<select class="sortDay" v-model="sortDay" @change="onChangeSortDay">
-					<option value="close">日付が近い順</option>
-					<option value="far">日付が遠い順</option>
-				</select>
-			</div> -->
+			<Header @searchForWords="searchForWords" />
+			<!-- @changeSearchBoolean="changeSearchBoolean" -->
+			<Sort @changeSortPriority="onChangeSortPriority" @changeSortDay="onChangeSortDay" />
 			<SheetFormat v-if="isShowAddModal" :addStatus="addStatus" />
+			<!-- {{ profileName }} -->
+
+			<!-- <button class="testBtn" @click="getAllTexts">テスト</button> -->
 			<main>
 				<div class="task">
 					<div class="TodoArea">

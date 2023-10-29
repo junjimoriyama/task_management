@@ -9,7 +9,7 @@ const { isEditTask,currentSelectedTaskID } = useSharedEditTaskMode()
 const { taskList } = taskDefinition()
 
 // tasksheetの項目定義
-const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority } = taskDefinition()
+const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority, taskMember } = taskDefinition()
 
 
 const maxId = ref(0)
@@ -36,6 +36,7 @@ if (selectEditTask) {
 	taskPIC.value = selectEditTask.PIC
 	taskStatus.value = selectEditTask.status
 	taskPriority.value = selectEditTask.priority
+	taskMember.value = selectEditTask.member
 }
 
 // 保存ボタン押した場合
@@ -51,6 +52,7 @@ function addTaskSave() {
 			taskPIC.value,
 			taskStatus.value,
 			taskPriority.value,
+			taskMember.value
 		)
 		taskList.value.push(newTask)
 		// 編集モードの場合(選択しているデータを変更)
@@ -64,6 +66,7 @@ function addTaskSave() {
 			selectEditTask.PIC = taskPIC.value
 			selectEditTask.status = taskStatus.value
 			selectEditTask.priority = taskPriority.value
+			selectEditTask.member = taskMember.value
 		}
 	}
 	// モーダル閉じる
@@ -111,7 +114,6 @@ const props = defineProps([
 			v-for="status in ['Todo', '進行中', '完了']" 
 			:value="status"
 			>
-			<!-- :selected="status === addStatus" -->
 			{{ status }}
 		</option>
 				</select>
@@ -125,6 +127,8 @@ const props = defineProps([
 					<option value="低" selected>優先度「低」</option>
 				</select>
 			</div>
+			<!-- メンバー -->
+			<input class="taskMember" type="text" v-model="taskMember" placeholder="メンバー">
 
 			<button class="addTaskSaveBtn" @click="addTaskSave">保存
 			</button>

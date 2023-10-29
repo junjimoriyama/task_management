@@ -3,18 +3,11 @@ import { TaskList } from '../composables/taskList'
 import { STORAGE_TASKLIST } from '../composables/storage'
 import { useSharedEditTaskMode, getPriorityColor } from '../composables/taskState'
 import { priorityOrder} from '../composables/sort'
-// import { getPriorityOrder } from '../composables/sort'
-// import { TaskSheetClass } from 'class/taskSheet';
-
 
 
 const { editTaskMode, currentSelectedTaskID } = useSharedEditTaskMode()
 
 const { taskList, changeTaskListData } = taskDefinition()
-
-// const { priorityOrder } =
-
-// const { priorityOrder } = getPriorityOrder()
 
 // 編集、削除メニュー表示
 function taskModifyMenuOpen(event: MouseEvent, index: number) {
@@ -75,8 +68,6 @@ const sortData =
 				return priorityDifference
 			})
 		})
-
-// return dateX - dateY
 
 
 // taskマウスで移動　=================================
@@ -206,11 +197,11 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 				{{ task.period }}
 			</div>
 			<div class="taskPIC">
-				{{ task.PIC }}
+				担当者 : {{ task.PIC }}
 			</div>
-			<!-- <div class="taskStatus">
-				{{ task.status }}
-			</div> -->
+			<div class="taskStatus">
+				メンバー : {{ task.member }}
+			</div>
 			<div class="taskPriority" :style="{ 'backgroundColor': getPriorityColor(task.priority) }">{{ task.priority }}
 			</div>
 			<div>
