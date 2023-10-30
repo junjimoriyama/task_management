@@ -183,13 +183,6 @@ const mousedown = (e: MouseEvent, index: number,) => {
   const clientX = e.clientX
   // チャートbar
   const adjustEl = e.target as HTMLElement
-  // // 親要素取得
-  // const adjustElParent = adjustEl.parentElement
-
-  // 初期の要素幅
-  const initialWidth = adjustEl.offsetWidth
-  // チャートbarの初期左位置(左側に移動する場合のみ使用)
-  const initialLeft = adjustEl.offsetLeft;
   // チャートbar右端の要素
   const adjustElRectRight = adjustEl.getBoundingClientRect().right
   // チャートbar左端の要素
@@ -227,8 +220,13 @@ const mousedown = (e: MouseEvent, index: number,) => {
 
   // 四捨五入する関数
   const customRound = (n: number) => {
-    // 引数が0より大きければ、より大きな数字、小さければより小さな数字を返す
-    return n > 0 ? Math.ceil(n) : Math.floor(n)
+    if (n < 0) {
+      return Math.floor(n)
+    } else if (n > 0) {
+      return Math.ceil(n)
+    } else if (n > -0.9 && n < -0.1) {
+      console.log('a')
+    }
   }
 
   // 日付を増減させる関数
@@ -237,15 +235,15 @@ const mousedown = (e: MouseEvent, index: number,) => {
     adjustStartDate = new Date(startDateStr)
     adjustEndDate = new Date(endDateStr)
     // 真ん中なら
-    if(isCenter) {
+    if (isCenter) {
       adjustStartDate.setDate(adjustStartDate.getDate() + moveSize)
       adjustEndDate.setDate(adjustEndDate.getDate() + moveSize)
       // 右なら
-    } else if(isRight) {
+    } else if (isRight) {
       adjustStartDate.setDate(adjustStartDate.getDate())
       adjustEndDate.setDate(adjustEndDate.getDate() + moveSize)
       // 左なら
-    } else if(isLeft) {
+    } else if (isLeft) {
       adjustStartDate.setDate(adjustStartDate.getDate() + moveSize)
       adjustEndDate.setDate(adjustEndDate.getDate())
     }
@@ -254,134 +252,67 @@ const mousedown = (e: MouseEvent, index: number,) => {
     newEndDateStr = dateConversion(adjustEndDate)
   }
 
-  // カレンダー始まりの日付
-  const calendarStartDate = new Date(`${dayState.startMonth}-01`)
 
-  
-  let adjustBothSize: number
-
-  if (isCenter) {
-    const mouseMoveEventCenter = (e: MouseEvent) => {
-      // mousemoveした座標
-      const currentXCenter = e.clientX
-      // 現在の座標からmousedownした座標をひく
-      const moveBothX = currentXCenter - clientX
+  const mousemoveEvent = (e: MouseEvent) => {
+    // 現在の座標
+    const currentX = e.clientX
+    // ブロック数とサイズを計算
+    let adjustBlock
+    if (isCenter) {
+      // 移動座標距離
+      const moveX = currentX - clientX
       // 移動した距離をブロック数で計算
-      const adjustBothX = customRound(moveBothX / BLOCK_SIZE)
-      // ブロック数の幅サイズで計算(30px単位)
-      adjustBothSize = adjustBothX * BLOCK_SIZE
+      adjustBlock = customRound(moveX / BLOCK_SIZE)
 
-      dateAjust(adjustBothX)
 
-      // カレンダー初めの日付以下になれば
-      if (adjustStartDate <= calendarStartDate) {
-        // 始まりの日をカレンダー始まりの日に
-        newStartDateStr = dateConversion(calendarStartDate)
-        adjustStartDateStr(newStartDateStr)
-        adjustEndDateStr(newEndDateStr)
-        // statusSortData.value[index].period = taskPeriod.value
-
-        // mousemove終了
-        window.removeEventListener('mousemove', mouseMoveEventCenter)
+    } else if (isRight) {
+      // 右へ座標移動距離
+      const moveRightX = currentX - adjustElRectRight
+      adjustBlock = moveRightX / BLOCK_SIZE
+      if (moveRightX / BLOCK_SIZE >= 0 && moveRightX / BLOCK_SIZE <= -1)  {
+        adjustBlock = 1
+        console.log('b')
       }
-      // 日付(useState)を保存
-      dateChange()
+      // const adjustBlockcustomRound = customRound(moveRightX / BLOCK_SIZE)
+      // console.log('adjustBlock:', adjustBlock);
+      // console.log('adjustBlockcustomRound:', adjustBlockcustomRound);
+
+    } else if (isLeft) {
+      // 左へ座標移動距離
+      const moveXLeft = currentX - adjustElRectLeft
+      adjustBlock = Math.floor(moveXLeft / BLOCK_SIZE)
+      // console.log('adjustBlockLeft:', adjustBlock);
+      // console.log('moveXLeft:', moveXLeft);
     }
-    // mouseupしたら
-    const mouseUpEventCenter = (e: MouseEvent) => {
-
-      window.removeEventListener('mousemove', mouseMoveEventCenter)
-      window.removeEventListener('mouseup', mouseUpEventCenter)
-    }
-
-    window.addEventListener('mousemove', mouseMoveEventCenter)
-    window.addEventListener('mouseup', mouseUpEventCenter)
-  }
-
-
-  // 右側をクリックしたら ==========================================
-  if (isRight) {
-    console.log('isRight')
-    // 右側に移動した時の処理
-    const mouseMoveEventRight = (e: MouseEvent) => {
-      // 移動しているx座標
-      const currentXRigth = e.clientX
-      // 要素外右側に移動した距離
-      const moveRightX = currentXRigth - adjustElRectRight
-      // ブロック数を計算(ceilは数値を次の整数に切り上げる)
-      const adjustBlock = Math.ceil(moveRightX / BLOCK_SIZE)
-      // BLOCK_SIZE単位で伸ばした距離を計算
-      const adjustSize = adjustBlock * BLOCK_SIZE
-      // adjustElの右側の幅を伸ばした要素幅
-      let rigthMoveNewWidth = initialWidth + adjustSize
-
-      /* 時間に関する処理 ==========================*/
+    // 向きに関係なくadjustBlockがあれば
+    if (adjustBlock) {
+      // 日付の変更
       dateAjust(adjustBlock)
-
-      // 新しい要素幅がBLOCK_SIZEより大きければ
-      if (rigthMoveNewWidth >= BLOCK_SIZE) {
-        // adjustEl.style.width = `${rigthMoveNewWidth}px`
-        // ここには左側の位置を変更しないような処理を追加
-      }
       // 日付(useState)を保存
       dateChange()
     }
-    // mouseupしたらmousemoveイベント終了
-    const mouseupEvent = () => {
-      // 終わりの日付が始まりの日付以上であれば
-      if (newEndDateStr >= startDateStr) {
-        // 終わりの日付が始まりの日付より小さければ
-      } else {
-      }
-      window.removeEventListener('mousemove', mouseMoveEventRight);
-      window.removeEventListener('mouseup', mouseupEvent)
+
+
+    // mouseupイベント
+    const mouseupEvent = (e: MouseEvent) => {
+      window.removeEventListener('mousemove', mousemoveEvent)
+      window.removeEventListener('mouseup', mousemoveEvent)
     }
-    window.addEventListener('mousemove', mouseMoveEventRight)
+    window.addEventListener('mousemove', mousemoveEvent)
     window.addEventListener('mouseup', mouseupEvent)
   }
-  // 左側をクリックしたら ==========================================
-  else if (isLeft) {
-    console.log('isLeft')
-    // 左側に移動した時の処理
-    const mouseMoveEventLeft = (e: MouseEvent) => {
-      // 移動しているx座標
-      const currentXLeft = e.clientX
-      // 要素外左側に移動した距離
-      const moveXLeft = currentXLeft - adjustElRectLeft
-      // ブロック数で計算
-      const adjustBlock = Math.floor(moveXLeft / BLOCK_SIZE)
-      // BLOCK_SIZE単位で伸ばした距離を計算
-      const adjustSize = adjustBlock * BLOCK_SIZE
-
-      /* 時間に関する処理 ==========================*/
-      dateAjust(adjustBlock)
-
-      // 日付(useState)を保存
-      dateChange()
-    }
-    // mousemove時の処理
-    const mouseUpEventLeft = () => {
-      // if (newStartDateStr < endDateStr) {
-      // useState書き替え
-      // 日付(useState)を保存
-      dateChange()
-      // } 
-      // else {
-      //   newStartDateStr = endDateStr
-      // }
-
-      // mousemoveイベント終了
-      window.removeEventListener('mousemove', mouseMoveEventLeft);
-      //mouseupイベント終了
-      window.removeEventListener('mouseup', mouseUpEventLeft);
-    }
-    /* removeEventListenerより先に走る */
-    // mousemoveイベント開始
-    window.addEventListener('mousemove', mouseMoveEventLeft)
-    //mouseupイベント開始
-    window.addEventListener('mouseup', mouseUpEventLeft);
-  }
+  // mousemoveEvent発火
+  mousemoveEvent(e)
 }
+
+// カレンダー始まりの日付
+const calendarStartDate = new Date(`${dayState.startMonth}-01`)
+
+//  // 終わりの日付が始まりの日付以上であれば
+//  if (newEndDateStr >= startDateStr) {
+//         // 終わりの日付が始まりの日付より小さければ
+//       } else {
+//       }
 
 // 優先度で並び替え
 const onChangeSortPriority = (value: string) => {
@@ -394,6 +325,8 @@ const onChangeSortDay = (value: string) => {
   changeSortDay(sortDay, sortChanged);
 }
 
+
+// cntrol＋K = 選択した右側を削除
 </script>
 
 
