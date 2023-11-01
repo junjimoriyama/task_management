@@ -224,9 +224,7 @@ const mousedown = (e: MouseEvent, index: number,) => {
       return Math.floor(n)
     } else if (n > 0) {
       return Math.ceil(n)
-    } else if (n > -0.9 && n < -0.1) {
-      console.log('a')
-    }
+    } 
   }
 
   // 日付を増減させる関数
@@ -264,18 +262,11 @@ const mousedown = (e: MouseEvent, index: number,) => {
       // 移動した距離をブロック数で計算
       adjustBlock = customRound(moveX / BLOCK_SIZE)
 
-
-    } else if (isRight) {
+    } else if (isRight) { 
       // 右へ座標移動距離
       const moveRightX = currentX - adjustElRectRight
       adjustBlock = moveRightX / BLOCK_SIZE
-      if (moveRightX / BLOCK_SIZE >= 0 && moveRightX / BLOCK_SIZE <= -1)  {
-        adjustBlock = 1
-        console.log('b')
-      }
-      // const adjustBlockcustomRound = customRound(moveRightX / BLOCK_SIZE)
-      // console.log('adjustBlock:', adjustBlock);
-      // console.log('adjustBlockcustomRound:', adjustBlockcustomRound);
+      console.log('adjustBlock:', adjustBlock);
 
     } else if (isLeft) {
       // 左へ座標移動距離

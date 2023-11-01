@@ -7,7 +7,6 @@ const emit = defineEmits(['searchForWords'])
 // searchForWords関数定義(検索ワードを親に渡す)
 const serchBtnClicked = (word) => {
 	emit('searchForWords', searchWord.value)
-	console.log(searchWord.value)
 }
 
 // const searchInput = () => {

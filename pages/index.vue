@@ -6,11 +6,8 @@ import Sort from '../components/Sort.vue'
 import { isShowAddModal, changeShowAddModal } from '../composables/componentStatus'
 import { changeSortPriority, changeSortDay, } from '../composables/sort'
 import { getSortValue } from '../composables/sort'
-// import { profileData } from '../composables/profile'
+// import { searchHitTaskList } from '../composables/search'
 
-// const { profileName, profileEmail, changeProfileName, changeProfileEmail } = profileData()
-
-const { editTaskMode, isEditTask, currentSelectedTaskID } = useSharedEditTaskMode()
 
 // taskList(reactive)
 const { taskList } = taskDefinition()
@@ -28,32 +25,6 @@ watch(taskList.value, () => {
 	localStorage.setItem(STORAGE_TASKLIST.value, JSON.stringify
 		(taskList.value));
 });
-
-// const isSearch = ref(true)
-
-// キーワード検索行う
-const searchForWords = (word: string) => {
-	// .highlightのタグを定義し取得。
-	document.querySelectorAll('.highlight').forEach(span => {
-		// spanタグ消す
-		span.outerHTML = span.innerHTML
-	});
-
-	// 全ての要素定義
-	const allElement = document.querySelectorAll('*');
-	// 全ての要素取得
-	allElement.forEach(el => {
-		// HTML要素であれば
-		if (el instanceof HTMLElement) {
-			// 要素全体から該当する引数の検索
-			const regs = new RegExp(word, 'g');
-			// 該当する要素のスタイル変更
-			const heighlightHTML = el.innerHTML.replace(regs, match => `<span class="highlight" style="background-color: yellow">${match}</span>`);
-			// 新しいHTMLを組み込む
-			el.innerHTML = heighlightHTML;
-		}
-	});
-};
 
 // 追加選択しているstatus
 const addStatus: Ref<string> = ref('');
@@ -79,15 +50,36 @@ const onChangeSortDay = (value: string) => {
 	changeSortDay(sortDay, sortChanged);
 }
 
+const searchHitTaskList = ref<TaskList[]>([]); // 初期化
 
+
+const searchForWords = (word: string) => {
+	if(word === '') {
+		searchHitTaskList.value = taskList.value
+	} else {
+		searchHitTaskList.value = taskList.value.filter(task => 
+		task.title?.includes(word) ||
+		task.description?.includes(word) ||
+		task.period?.includes(word) ||
+		task.PIC?.includes(word) ||
+		task.status?.includes(word) ||
+		task.priority?.includes(word) ||
+		task.member?.includes(word) 
+		)
+	}
+  console.log(searchHitTaskList.value)
+ return searchHitTaskList.value
+};
 
 </script>
 
 <template>
 	<div>
 		<div class="container">
-			<Header @searchForWords="searchForWords" />
-			<!-- @changeSearchBoolean="changeSearchBoolean" -->
+			<Header
+			@searchForWords="searchForWords"
+			/>
+			
 			<Sort @changeSortPriority="onChangeSortPriority" @changeSortDay="onChangeSortDay" />
 			<SheetFormat v-if="isShowAddModal" :addStatus="addStatus" />
 			<!-- {{ profileName }} -->
@@ -110,7 +102,9 @@ const onChangeSortDay = (value: string) => {
 						</div>
 
 						<TodoList status="Todo" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
-							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
+							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority"
+							:searchHitTaskList="searchHitTaskList"
+							/>
 					</div>
 					<div class="progressionArea">
 						<div class="heading">
@@ -126,7 +120,8 @@ const onChangeSortDay = (value: string) => {
 							</div>
 						</div>
 						<TodoList status="進行中" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
-							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
+							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority"
+							:searchHitTaskList="searchHitTaskList" />
 					</div>
 					<div class="completionArea">
 						<div class="heading">
@@ -142,7 +137,8 @@ const onChangeSortDay = (value: string) => {
 							</div>
 						</div>
 						<TodoList status="完了" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
-							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
+							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority"
+							:searchHitTaskList="searchHitTaskList" />
 					</div>
 				</div>
 			</main>

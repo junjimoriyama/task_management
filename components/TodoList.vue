@@ -2,8 +2,8 @@
 import { TaskList } from '../composables/taskList'
 import { STORAGE_TASKLIST } from '../composables/storage'
 import { useSharedEditTaskMode, getPriorityColor } from '../composables/taskState'
-import { priorityOrder} from '../composables/sort'
-
+import { priorityOrder } from '../composables/sort'
+// import { searchForWords } from '../composables/search'
 
 const { editTaskMode, currentSelectedTaskID } = useSharedEditTaskMode()
 
@@ -43,8 +43,21 @@ const props = defineProps([
 	'sortDay',
 	'changeSortPriority',
 	'changeSortDay',
-	'sortChanged'
+	'sortChanged',
+	'searchHitTaskList'
 ]);
+
+
+watch(
+	// props.は単一の値のため直接は渡せず、()=>とすることで現在の値を渡せる
+	() => props.searchHitTaskList,
+	() => {
+		console.log(props.searchHitTaskList);
+	}
+);
+
+
+
 // 優先度並び替え
 const sortData =
 	computed(() => {
@@ -56,18 +69,18 @@ const sortData =
 
 			const priorityDifference = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
 			// 優先度が同じなら日付順に並べる
-			if(props.sortChanged === true) {
+			if (props.sortChanged === true) {
 				return 0
 			} else if (priorityDifference === 0) {
-				
-					const dateX = new Date(a.period.split(' 〜 ')[1])
-					const dateY = new Date(b.period.split(' 〜 ')[1])
 
-					return dateX.getTime() - dateY.getTime()
-				}
-				return priorityDifference
-			})
+				const dateX = new Date(a.period.split(' 〜 ')[1])
+				const dateY = new Date(b.period.split(' 〜 ')[1])
+
+				return dateX.getTime() - dateY.getTime()
+			}
+			return priorityDifference
 		})
+	})
 
 
 // taskマウスで移動　=================================
@@ -151,11 +164,7 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 		const areaIndex = ['Todo', '進行中', '完了']
 		// エリアの番号を移動させた要素の状態に
 		if (moveItem.value) {
-			// moveItem.value.status = areaIndex[closestIndex]
 			changeTaskListData(index, 'status', areaIndex[closestIndex])
-
-			// タスクリストの大元のデータも更新
-			// taskList.value[index].status = moveItem.value.status
 		}
 
 		// 終了させる
@@ -173,7 +182,6 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 	// カーソルポインターに戻す
 	parentElement.style.cursor = 'pointer'
 }
-
 
 </script>
 

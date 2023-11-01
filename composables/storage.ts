@@ -14,4 +14,7 @@ export function taskListPushLocalStorage() {
 			taskList.value.push(data)
 		})
 	}
+	return {
+		localStorageData
+	}
 }
