@@ -12,6 +12,15 @@ const { taskList } = taskDefinition()
 const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority, taskMember } = taskDefinition()
 
 
+const props = defineProps([
+'addStatus'
+]);
+console.log(`props.addStatus: ${props.addStatus}`)
+taskStatus.value = props.addStatus
+
+
+// taskPriority.value = props.addStatus
+
 const maxId = ref(0)
 if (taskList.value.length > 0) {
 	const ids = taskList.value.map(task => task.id)
@@ -78,11 +87,6 @@ function closeSheet() {
 	changeShowAddModal(false)
 }
 
-const props = defineProps([
-'addStatus'
-]);
-
-
 </script>
 
 <template>
@@ -108,8 +112,7 @@ const props = defineProps([
 			</div>
 			<!-- 状態 -->
 			<div class="taskStatus" >
-				<select name="" id="" v-model="taskStatus"
-				>
+				<select name="" id="" v-model="taskStatus">
 				<option 
 			v-for="status in ['Todo', '進行中', '完了']" 
 			:value="status"
@@ -120,11 +123,11 @@ const props = defineProps([
 			</div>
 			<!-- 優先度 -->
 			<div class="priority">
-				<select name="" id="" v-model="taskPriority">
+				<select v-model="taskPriority">
 					<!-- <option>優先度</option> -->
 					<option value="高">優先度「高」</option>
 					<option value="中">優先度「中」</option>
-					<option value="低" selected>優先度「低」</option>
+					<option value="低">優先度「低」</option>
 				</select>
 			</div>
 			<!-- メンバー -->

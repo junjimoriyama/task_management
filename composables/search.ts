@@ -1,22 +1,38 @@
+import { TaskList } from './taskList'
+
 const { taskList } = taskDefinition()
 
-export const searchHitTaskList = ref(taskList.value)
+// 検索バーの表示・非表示切り替え
+export const isShowSearch = useState<boolean>('isShowSearch', () => true)
 
-// // キーワード検索行う
-// export const searchForWords = (word: string) => {
-// 	if(word === '') {
-// 		searchHitTaskList.value = taskList.value
-// 	} else {
-// 		searchHitTaskList.value = taskList.value.filter(task => 
-// 		task.title?.includes(word) ||
-// 		task.description?.includes(word) ||
-// 		task.period?.includes(word) ||
-// 		task.PIC?.includes(word) ||
-// 		task.status?.includes(word) ||
-// 		task.priority?.includes(word) ||
-// 		task.member?.includes(word) 
-// 		)
-// 	}
-//   console.log(searchHitTaskList.value)
-//  return searchHitTaskList.value
-// };
+// 検索バーの表示・非表示切り替えメソッド
+export const changeIsSearch = (display: boolean) => {
+	const isShowSearch = useState<boolean>('isShowSearch', () => true)
+  isShowSearch.value = display
+}
+
+// 検索ワード(v-model)
+export const searchWord = ref('森山')
+
+// 検索機能でヒットしたtask
+// export const searchHitTaskList = ref<TaskList[]>(taskList.value)
+
+// キーワード検索行う
+/* キーワードに合うtaskを絞る */
+export const searchForWords = (word: string): TaskList[] => {
+  if (word) {
+    // 検索ボックスに何か文字が入力されている場合
+    return taskList.value.filter(task => 
+      task.title?.includes(word) ||
+      task.description?.includes(word) ||
+      task.period?.includes(word) ||
+      task.PIC?.includes(word) ||
+      task.status?.includes(word) ||
+      task.priority?.includes(word) ||
+      task.member?.includes(word)
+    );
+  } else {
+    // 検索ボックスが空白かそれ以外（undefined, nullなど）の場合は全てのタスクを表示
+    return taskList.value;
+  }
+};

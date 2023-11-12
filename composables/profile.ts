@@ -1,23 +1,9 @@
+// プロフィールの名前
+export const profileName = useState('profileName', () => 'myName')
 
-export const profileData = () => {
-  const profileName = useState('profileName', () => 'myName')
-  const profileEmail = useState('profileEmail', () => 'myEmail')
+export const profileEmail = useState('profileEmail', () => 'myEmail')
  
-  // const changeProfileName = (e: Event) => {
-  //   if(e.target) {
-  //     const target = e.target as  HTMLInputElement
-  //     profileName.value = target.value
-  //   }
-  // }
-  // const changeProfileEmail = (newProfileEmail: string) => {
-  //   // profileEmail.value = newProfileEmail
-  // }
-
-  return {
-    profileName,
-    profileEmail,
-    // changeProfileName,
-    // changeProfileEmail
-  }
+// プロフィールネーム変更
+export const profileDataChange = (word: string) => {
+  profileName.value = word
 }
-

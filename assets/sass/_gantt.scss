@@ -9,9 +9,11 @@
     display: flex;
 
     .taskZorn {
-      margin: 5px;
-      // position: sticky;
-      // left: 0;
+      margin-right: 5px;
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background-color: #fff;
 
       .taskHeading {
         display: grid;
@@ -43,8 +45,8 @@
         grid-template-columns: (100px 50px 150px 60px 50px);
         border-radius: 10px;
         grid-gap: 3px;
-        margin-top: 5px;
-        margin-bottom: 5px;
+        // margin-top: 5px;
+        // margin-bottom: 5px;
 
         li:not(.block) {
           overflow-wrap: break-word;
@@ -63,19 +65,6 @@
           border: 1px solid #000;
         }
 
-
-        .block {
-          background-color: #524f3e;
-          width: 100px;
-          height: 30px;
-          border-radius: 30px;
-          position: absolute;
-          top: 50%;
-          right: 0;
-          translate: 100% -50%;
-          cursor: pointer;
-        }
-
         .activePeriod {
           background-color: rgb(232, 246, 182);
         }
@@ -83,6 +72,25 @@
     }
 
     .calendarZorn {
+      position: relative;
+      .blocks {
+        .block {
+          background-color: #524f3e;
+          width: 100px;
+          height: 30px;
+          border-radius: 30px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          transform: translateY(-50%);
+          // top: 50%;
+          // right: 0;
+          // translate: 100% -50%;
+          // cursor: pointer;
+        }
+      }
+
+
       .month {
         background-color: #F7F7F7;
         display: flex;

@@ -6,8 +6,13 @@ import Sort from '../components/Sort.vue'
 import { isShowAddModal, changeShowAddModal } from '../composables/componentStatus'
 import { changeSortPriority, changeSortDay, } from '../composables/sort'
 import { getSortValue } from '../composables/sort'
-// import { searchHitTaskList } from '../composables/search'
+import { searchForWords, changeIsSearch } from '../composables/search'
+// VueUseの取り込み
+import { useScroll } from "@vueuse/core"
+import { useMouse } from "@vueuse/core";
 
+// 検索ボックス表示
+changeIsSearch(true)
 
 // taskList(reactive)
 const { taskList } = taskDefinition()
@@ -29,7 +34,9 @@ watch(taskList.value, () => {
 // 追加選択しているstatus
 const addStatus: Ref<string> = ref('');
 // tasksheet追加
-const addTask = (initialStatus: string) => {
+const addTask = (status: string) => {
+	console.log(status)
+	addStatus.value = status
 	changeShowAddModal(true);
 }
 
@@ -42,7 +49,6 @@ const taskStatusLength = (status: string) => {
 const onChangeSortPriority = (value: string) => {
 	sortPriority.value = value
 	changeSortPriority(sortPriority, sortChanged);
-
 }
 // 日付順関数実行
 const onChangeSortDay = (value: string) => {
@@ -50,36 +56,22 @@ const onChangeSortDay = (value: string) => {
 	changeSortDay(sortDay, sortChanged);
 }
 
-const searchHitTaskList = ref<TaskList[]>([]); // 初期化
+const scrollContainer = ref(null);
 
+const { x } = useScroll(scrollContainer);
 
-const searchForWords = (word: string) => {
-	if(word === '') {
-		searchHitTaskList.value = taskList.value
-	} else {
-		searchHitTaskList.value = taskList.value.filter(task => 
-		task.title?.includes(word) ||
-		task.description?.includes(word) ||
-		task.period?.includes(word) ||
-		task.PIC?.includes(word) ||
-		task.status?.includes(word) ||
-		task.priority?.includes(word) ||
-		task.member?.includes(word) 
-		)
-	}
-  console.log(searchHitTaskList.value)
- return searchHitTaskList.value
-};
+watch(x, (newValue) => {
+  console.log(newValue); // スクロール位置をコンソールに出力
+});
+
+// const { x, y } = useMouse();
 
 </script>
 
 <template>
 	<div>
 		<div class="container">
-			<Header
-			@searchForWords="searchForWords"
-			/>
-			
+			<Header @searchForWords="searchForWords" />
 			<Sort @changeSortPriority="onChangeSortPriority" @changeSortDay="onChangeSortDay" />
 			<SheetFormat v-if="isShowAddModal" :addStatus="addStatus" />
 			<!-- {{ profileName }} -->
@@ -87,7 +79,7 @@ const searchForWords = (word: string) => {
 			<!-- <button class="testBtn" @click="getAllTexts">テスト</button> -->
 			<main>
 				<div class="task">
-					<div class="TodoArea">
+					<div class="TodoArea" ref="scrollContainer">
 						<div class="heading">
 							<div class="listName">Todoリスト<span class="countList">
 									{{ taskStatusLength('Todo') }}
@@ -101,9 +93,8 @@ const searchForWords = (word: string) => {
 							</div>
 						</div>
 
-						<TodoList status="Todo" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
-							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority"
-							:searchHitTaskList="searchHitTaskList"
+						<TodoList status="Todo" :addStatus="addStatus" :sortChanged="sortChanged" :sortPriority="sortPriority"
+							:sortDay="sortDay" :changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" 
 							/>
 					</div>
 					<div class="progressionArea">
@@ -119,9 +110,8 @@ const searchForWords = (word: string) => {
 								タスクを追加
 							</div>
 						</div>
-						<TodoList status="進行中" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
-							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority"
-							:searchHitTaskList="searchHitTaskList" />
+						<TodoList status="進行中" :addStatus="addStatus" :sortChanged="sortChanged" :sortPriority="sortPriority"
+							:sortDay="sortDay" :changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
 					</div>
 					<div class="completionArea">
 						<div class="heading">
@@ -136,9 +126,8 @@ const searchForWords = (word: string) => {
 								タスクを追加
 							</div>
 						</div>
-						<TodoList status="完了" :sortChanged="sortChanged" :sortPriority="sortPriority" :sortDay="sortDay"
-							:changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority"
-							:searchHitTaskList="searchHitTaskList" />
+						<TodoList status="完了" :addStatus="addStatus" :sortChanged="sortChanged" :sortPriority="sortPriority"
+							:sortDay="sortDay" :changeSortDay="changeSortDay" :changeSortPriority="changeSortPriority" />
 					</div>
 				</div>
 			</main>

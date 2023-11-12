@@ -1,17 +1,7 @@
 <script setup>
-
-// 検索ワード(v-model)
-const searchWord = ref('森山')
-// emit定義
-const emit = defineEmits(['searchForWords'])
-// searchForWords関数定義(検索ワードを親に渡す)
-const serchBtnClicked = (word) => {
-	emit('searchForWords', searchWord.value)
-}
-
-// const searchInput = () => {
-// 	emit('changeSearchBoolean')
-// }
+// 検索ボックス
+import { searchWord } from '../composables/search'
+import { profileName, profileEmail, profileDataChange } from '../composables/profile'
 
 </script>
 
@@ -19,6 +9,10 @@ const serchBtnClicked = (word) => {
 	<div>
 		<header>
 			<div class="headerWrap">
+				<div class="myName">
+					<!-- {{ profileName }} -->
+					{{ useProfileName }}
+				</div>
 				<!-- メイン -->
 				<div class="board">
 					<nuxt-link to="/#">
@@ -35,11 +29,12 @@ const serchBtnClicked = (word) => {
 						<div class="fa-solid fa-user"></div>
 					</nuxt-link>
 				</div>
-				<div class="search">
+				<div class="search" v-if="isShowSearch">
 					<input type="text" placeholder="検索" v-model="searchWord">
 					<!-- キーワード検索 -->
 					<div class="fa-solid fa-magnifying-glass"></div>
-					<div class="searchBtn" @click="serchBtnClicked()">検索</div>
+					<div class="searchBtn" >検索</div>
+					<!-- @click="serchBtnClicked()" -->
 				</div>
 				<!-- <div class="chart">
 						<NuxtLink to="/chart"><i class="fa-solid fa-chart-gantt"></i></NuxtLink>

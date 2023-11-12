@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 // import { Sort } from '../components/Sort';
 // import { useTaskPeriod } from '../composables/taskList'
+import { Cipher } from 'crypto';
 import dayjs, { type Dayjs } from 'dayjs'
 
 // tasksheetの項目定義
@@ -11,10 +12,33 @@ const { taskList } = taskDefinition()
 // sort.tsで定義
 const { sortPriority, sortDay, sortChanged } = getSortValue()
 
+// タスク項目
+const taskHeading = ref<HTMLElement>()
+const taskHeadingHeight = ref(0)
+// 
+const taskItem = ref<HTMLElement[]>()
+const taskItemHeight = ref(0)
 
-// 初めにlocalStorageからtaskListに入れる
+
+const taskItemDistance = 5
+
+// 検索ボックス表示
+changeIsSearch(true)
+
 onMounted(() => {
+  // 初めにlocalStorageからtaskListに入れる
   taskListPushLocalStorage()
+
+  // HTMLが全て更新されてから実行
+  nextTick(() => {
+    if(taskHeading.value && taskHeading.value.tagName === 'UL') {
+      taskHeadingHeight.value = taskHeading.value.clientHeight
+    }
+    if(taskItem.value && taskItem.value[0].tagName === 'UL') {
+      taskItemHeight.value = taskItem.value[0].clientHeight
+      console.log(taskItemHeight.value)
+    }
+  })
 })
 
 // taskListに変化があればlocalStorageに反映させる
@@ -31,7 +55,6 @@ const statusSortData = computed(() => {
     return statusOrder.indexOf(x.status) - statusOrder.indexOf(y.status)
   })
 })
-
 
 // ガントチャートの表示 =======================================
 // 各月の1日ごとの情報の型
@@ -153,12 +176,33 @@ const getTaskPeriod = (index: number) => {
   // task初めの日 - チャート初めの日を差し引いた日数 +1 = スタートのブロックの位置
   startBlock = (startDateMillis - chartStartMillis) / (1000 * 3600 * 24)
   endBlock = (endDateMillis - chartStartMillis) / (1000 * 3600 * 24)
-
+console.log(taskHeadingHeight.value)
   return {
     width: `${(endBlock - startBlock + 1) * BLOCK_SIZE}px`,
-    right: `-${startBlock * BLOCK_SIZE + 5}px`
+    left: `${startBlock * BLOCK_SIZE }px`,
+    top: `${ (taskItemHeight.value + taskItemDistance) * index + taskItemHeight.value / 2 + taskHeadingHeight.value + taskItemDistance}px`
   }
 }
+
+// 特定のli要素を選択する
+
+// onMounted( () => {
+//   setTimeout(() => {
+//     const taskUlEl = document.querySelectorAll('.taskItem');
+//     console.log(taskUlEl);
+
+//     // 各li要素のY座標を取得する
+//     taskUlEl.forEach(ulEL => {
+//       const taskUlElRect = ulEL.getBoundingClientRect();
+//       const taskUlElY = taskUlElRect.top;
+//       console.log('Y座標:', taskUlElY);
+//     });
+//   }, 0);
+// })
+
+
+
+
 
 // =====================================================
 
@@ -177,6 +221,10 @@ const getTaskColor = (status: string) => {
 }
 
 // ========================================================
+
+// const blocks = document.querySelectorAll('.block')
+// console.log(blocks)
+
 
 const mousedown = (e: MouseEvent, index: number,) => {
   // クリックした座標
@@ -199,6 +247,15 @@ const mousedown = (e: MouseEvent, index: number,) => {
   // 上記以外をクリック
   const isCenter = !isRight && !isLeft
 
+  // カーソルを変更
+  if (isCenter) {
+    adjustEl.style.cursor = 'ew-resize'
+  } else if (isLeft) {
+    adjustEl.style.cursor = 'w-resize'
+  } else if (isRight) {
+    adjustEl.style.cursor = 'e-resize'
+  }
+
   // 日付をdate型へ
   let adjustStartDate: Date
   let adjustEndDate: Date
@@ -220,11 +277,15 @@ const mousedown = (e: MouseEvent, index: number,) => {
 
   // 四捨五入する関数
   const customRound = (n: number) => {
+    // 0より小さければ
     if (n < 0) {
+      // より小さな数字を返す -0.1なら-1 0.1なら1
       return Math.floor(n)
+      // 0より大きければ
     } else if (n > 0) {
+      // より大きな数字を返す -0.1なら0 0.1なら1
       return Math.ceil(n)
-    } 
+    }
   }
 
   // 日付を増減させる関数
@@ -236,6 +297,7 @@ const mousedown = (e: MouseEvent, index: number,) => {
     if (isCenter) {
       adjustStartDate.setDate(adjustStartDate.getDate() + moveSize)
       adjustEndDate.setDate(adjustEndDate.getDate() + moveSize)
+
       // 右なら
     } else if (isRight) {
       adjustStartDate.setDate(adjustStartDate.getDate())
@@ -250,60 +312,46 @@ const mousedown = (e: MouseEvent, index: number,) => {
     newEndDateStr = dateConversion(adjustEndDate)
   }
 
-
   const mousemoveEvent = (e: MouseEvent) => {
     // 現在の座標
     const currentX = e.clientX
     // ブロック数とサイズを計算
-    let adjustBlock
+    let adjustBlock = 0
     if (isCenter) {
       // 移動座標距離
       const moveX = currentX - clientX
       // 移動した距離をブロック数で計算
-      adjustBlock = customRound(moveX / BLOCK_SIZE)
+      adjustBlock = moveX / BLOCK_SIZE
 
-    } else if (isRight) { 
+    } else if (isRight) {
       // 右へ座標移動距離
-      const moveRightX = currentX - adjustElRectRight
-      adjustBlock = moveRightX / BLOCK_SIZE
-      console.log('adjustBlock:', adjustBlock);
+      const moveXRight = currentX - adjustElRectRight
+      adjustBlock = Math.ceil(moveXRight / BLOCK_SIZE)
 
     } else if (isLeft) {
       // 左へ座標移動距離
       const moveXLeft = currentX - adjustElRectLeft
       adjustBlock = Math.floor(moveXLeft / BLOCK_SIZE)
-      // console.log('adjustBlockLeft:', adjustBlock);
-      // console.log('moveXLeft:', moveXLeft);
     }
-    // 向きに関係なくadjustBlockがあれば
-    if (adjustBlock) {
-      // 日付の変更
-      dateAjust(adjustBlock)
-      // 日付(useState)を保存
+    // 日付の変更
+    dateAjust(adjustBlock)
+    // 日付(useState)を保存
+    // 条件:①カレンダー始まりの日付より変更した日付が大きければ
+    // 条件:②始まりの日付が終わりの日付以上にならず、終わりの日付が始まりの日付以下にならない
+    if (new Date(newStartDateStr) >= new Date(`${dayState.startMonth}-01`) && (newEndDateStr >= startDateStr && newStartDateStr <= endDateStr)) {
       dateChange()
     }
-
-
-    // mouseupイベント
-    const mouseupEvent = (e: MouseEvent) => {
-      window.removeEventListener('mousemove', mousemoveEvent)
-      window.removeEventListener('mouseup', mousemoveEvent)
-    }
-    window.addEventListener('mousemove', mousemoveEvent)
-    window.addEventListener('mouseup', mouseupEvent)
   }
-  // mousemoveEvent発火
-  mousemoveEvent(e)
+  // mouseupイベント
+  const mouseupEvent = (e: MouseEvent) => {
+    // カーソルを元に戻す
+    adjustEl.style.cursor = 'pointer'
+    window.removeEventListener('mousemove', mousemoveEvent)
+    window.removeEventListener('mouseup', mousemoveEvent)
+  }
+  window.addEventListener('mousemove', mousemoveEvent)
+  window.addEventListener('mouseup', mouseupEvent)
 }
-
-// カレンダー始まりの日付
-const calendarStartDate = new Date(`${dayState.startMonth}-01`)
-
-//  // 終わりの日付が始まりの日付以上であれば
-//  if (newEndDateStr >= startDateStr) {
-//         // 終わりの日付が始まりの日付より小さければ
-//       } else {
-//       }
 
 // 優先度で並び替え
 const onChangeSortPriority = (value: string) => {
@@ -329,7 +377,7 @@ const onChangeSortDay = (value: string) => {
       <Sort @changeSortPriority="onChangeSortPriority" @changeSortDay="onChangeSortDay" />
       <div class="taskGantt">
         <div class="taskZorn">
-          <ul class="taskHeading">
+          <ul class="taskHeading" ref="taskHeading">
             <li class="taskTitle">タイトル</li>
             <li class="taskPIC">担当者</li>
             <li class="taskPeriod">期間</li>
@@ -337,8 +385,8 @@ const onChangeSortDay = (value: string) => {
             <li class="taskPriority">優先度</li>
           </ul>
 
-          <ul class="taskItem" v-for="(task, index) in statusSortData" :key="index"
-            :style="{ backgroundColor: getTaskColor(task.status) }">
+          <ul class="taskItem" v-for="(task, index) in statusSortData" :key="index" ref="taskItem"
+            :style="{ backgroundColor: getTaskColor(task.status), marginTop: `${taskItemDistance}px` }">
             <li class="taskTitle">{{ task.title }}</li>
             <li class="taskPIC">{{ task.PIC }}</li>
             <!-- <li class="taskPeriod">{{ task.taskPeriodStart }}</li> -->
@@ -346,11 +394,15 @@ const onChangeSortDay = (value: string) => {
             <li class="taskStatus">{{ task.status }}</li>
             <li class="taskPriority" :style="{ 'backgroundColor': getPriorityColor(task.priority) }">
               {{ task.priority }}</li>
-            <li class="block" :style="getTaskPeriod(index)" @mousedown="mousedown($event, index)">
-            </li>
+            <!-- <li class="block" :style="getTaskPeriod(index)" @mousedown="mousedown($event, index)">
+            </li> -->
           </ul>
         </div>
         <div class="calendarZorn">
+          <ul class="blocks">
+            <li class="block" v-for="(task, index) in statusSortData" :key="index" :style="getTaskPeriod(index)" @mousedown="mousedown($event, index)">
+            </li>
+          </ul>
           <div class="month">
             <div class="monthItem" v-for="(calendar, index) in dayState.calendars">
               {{ calendar.date }}

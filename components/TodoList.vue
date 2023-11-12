@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { TaskList } from '../composables/taskList'
-import { STORAGE_TASKLIST } from '../composables/storage'
 import { useSharedEditTaskMode, getPriorityColor } from '../composables/taskState'
-import { priorityOrder } from '../composables/sort'
-// import { searchForWords } from '../composables/search'
+import { priorityOrder, getSortValue } from '../composables/sort'
+import { searchWord, searchForWords } from '../composables/search'
 
 const { editTaskMode, currentSelectedTaskID } = useSharedEditTaskMode()
 
+// taskListと
 const { taskList, changeTaskListData } = taskDefinition()
+
+// 並べ替え
+const { sortPriority, sortChanged } = getSortValue()
+
 
 // 編集、削除メニュー表示
 function taskModifyMenuOpen(event: MouseEvent, index: number) {
@@ -36,51 +40,61 @@ function editTask(index: number) {
 	editTaskMode(true, currentSelectedTaskID.value)
 }
 
+// index.vueよりtodo,進行中、完了などの文字列が渡されている
 const props = defineProps([
 	'status',
-	// 'initialStatus',
 	'sortPriority',
-	'sortDay',
-	'changeSortPriority',
-	'changeSortDay',
-	'sortChanged',
-	'searchHitTaskList'
+	'addStatus'
 ]);
 
 
-watch(
-	// props.は単一の値のため直接は渡せず、()=>とすることで現在の値を渡せる
-	() => props.searchHitTaskList,
-	() => {
-		console.log(props.searchHitTaskList);
-	}
-);
+// 検索したタスクのIDをしまう箱
+const searchResultTaskID = ref<number[]>([])
+
+// 検索ボックスの文字が変わったらキーワードに合うtaskを絞る関数実行
+watch(searchWord, () => {
+	// キーワードで絞ったタスクのIDを取得
+  searchResultTaskID.value = searchForWords(searchWord.value).map(task => task.id);
+});
 
 
+// const searchAndSortList = computed(() => {
+// 	// 検索ボックスに文字が入った場合とそうでない場合に並べ替えるリストを変える
+// 	const sortToList = searchWord ? [...searchHitTaskList.value] : [...taskList.value]
 
-// 優先度並び替え
-const sortData =
-	computed(() => {
-		return taskList.value.sort((a, b) => {
+// 	// 数値型を返さなければいけない
+// 	return sortToList.sort((a, b) => {
+// 		// sortChanged.value = true
+// 		if (sortPriority.value === 'toLow') {
+// 			return priorityOrder.indexOf(b.priority) - priorityOrder.indexOf(a.priority)
+// 		}
+// 		const priorityDifference = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
 
-			if (props.sortPriority === 'toLow') {
-				[a, b] = [b, a]
-			}
+// 		if (priorityDifference === 0) {
+// 			const dateA = new Date(a.period.split(' 〜 ')[1])
+// 			const dateB = new Date(b.period.split(' 〜 ')[1])
+// 			return dateA.getTime() - dateB.getTime()
+// 		}
+// 		// number型を返す
+// 		return priorityDifference
+// 	})
+// })
 
-			const priorityDifference = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
-			// 優先度が同じなら日付順に並べる
-			if (props.sortChanged === true) {
-				return 0
-			} else if (priorityDifference === 0) {
+const sortData = taskList.value.sort((a, b) => {
+		if (sortPriority.value === 'toLow') {
+			return priorityOrder.indexOf(b.priority) - priorityOrder.indexOf(a.priority)
+		}
+		const priorityDifference = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority)
 
-				const dateX = new Date(a.period.split(' 〜 ')[1])
-				const dateY = new Date(b.period.split(' 〜 ')[1])
-
-				return dateX.getTime() - dateY.getTime()
-			}
-			return priorityDifference
-		})
+		if (priorityDifference === 0) {
+			const dateA = new Date(a.period.split(' 〜 ')[1])
+			const dateB = new Date(b.period.split(' 〜 ')[1])
+			return dateA.getTime() - dateB.getTime()
+		}
+		// number型を返す
+		return priorityDifference
 	})
+
 
 
 // taskマウスで移動　=================================
@@ -189,7 +203,8 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 <template>
 	<!-- @mouseup="mouseup($event, index)" -->
 	<ul class="TodoTaskLineup">
-		<li class="eachTask" v-for="(task, index) in sortData" :key="task.id" v-show="task.status === status"
+		<!-- v-show: 進行状態が合致するものがtrue →  ID.lengthが0で全てのタスク表示　or ID.lengthが1つでもあれば検索文字と合致するタスクを表示 -->
+		<li class="eachTask" v-for="(task, index) in sortData" :key="task.id" v-show="task.status === status && (searchResultTaskID.length === 0 || searchResultTaskID.length && searchResultTaskID.includes(task.id))"
 			@mousedown="mousedown($event, index)">
 			<!-- @mousemove="mousemove($event, index)" -->
 			<div class="taskID">
