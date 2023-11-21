@@ -56,16 +56,6 @@ const onChangeSortDay = (value: string) => {
 	changeSortDay(sortDay, sortChanged);
 }
 
-const scrollContainer = ref(null);
-
-const { x } = useScroll(scrollContainer);
-
-watch(x, (newValue) => {
-  console.log(newValue); // スクロール位置をコンソールに出力
-});
-
-// const { x, y } = useMouse();
-
 </script>
 
 <template>

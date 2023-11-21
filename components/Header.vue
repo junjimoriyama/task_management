@@ -2,6 +2,9 @@
 // 検索ボックス
 import { searchWord } from '../composables/search'
 import { profileName, profileEmail, profileDataChange } from '../composables/profile'
+// profile画像
+const uploadedImg = localStorage.getItem('uploadedImg')
+
 
 </script>
 
@@ -9,8 +12,10 @@ import { profileName, profileEmail, profileDataChange } from '../composables/pro
 	<div>
 		<header>
 			<div class="headerWrap">
+				<div class="profileImg">
+					<img :src="uploadedImg" alt="アカウント">
+				</div>
 				<div class="myName">
-					<!-- {{ profileName }} -->
 					{{ useProfileName }}
 				</div>
 				<!-- メイン -->

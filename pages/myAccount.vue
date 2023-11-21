@@ -8,9 +8,10 @@ onMounted(() => {
   imgUrl.value = localStorage.getItem('uploadedImg') || '';
 })
 
-// 検索ボックス非表示(searc.tsをimportしなくても良い)
+// 検索ボックス非表示
 changeIsSearch(false)
 
+// 入力された値
 const myName = ref('')
 
 // 決定ボタンをクリックしたら
@@ -57,7 +58,6 @@ const onImgChange = (changeEvent: Event) => {
     
   }
 }
-
 </script>
 
 <template>
@@ -79,19 +79,17 @@ const onImgChange = (changeEvent: Event) => {
         </div>
         <div class="profileData">
           <div class="userName">
-            名前<br>
-            <!-- <input type="text"
-            @input="changeProfileName($event)"
-            > -->
+            <p>名前</p>
+            
             <input type="text" v-model="myName"
             >
             <!-- @input="changeProfileName($event)"  -->
           </div>
           <div class="mailAddress">
-            メールアドレス<br>
-            <!-- <input type="email" v-model="inputProfileEmail"> -->
+            <p>メールアドレス</p>
+            <input type="email">
           </div>
-          <button class="confirmBtn"
+          <button class="profileConfirmBtn"
           @click="doProfileDataChange"
           >決定</button>
         </div>

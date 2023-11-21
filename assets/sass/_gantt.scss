@@ -73,6 +73,7 @@
 
     .calendarZorn {
       position: relative;
+      overflow-x: auto; // これがないと本日の日付までscrollされない
       .blocks {
         .block {
           background-color: #524f3e;
@@ -87,16 +88,17 @@
           // right: 0;
           // translate: 100% -50%;
           // cursor: pointer;
+          
         }
       }
-
 
       .month {
         background-color: #F7F7F7;
         display: flex;
 
         .monthItem {
-          border-right: 1px solid #ccc;
+          background-color: #dcdcdc;
+          // border-right: 1px solid #ccc;
           padding-top: 10px;
         }
       }
@@ -106,7 +108,7 @@
         text-align: center;
         color: #000;
         background-color: #fff;
-        border: 1px solid #ccc;
+        border-top: 1px solid #ccc;
 
         .dayItem {
           width: 30px;
@@ -117,7 +119,7 @@
           justify-content: center;
 
           &:last-of-type {
-            border-right: none;
+            border-right: 1px solid red;
           }
 
           .calendarBlock {

@@ -1,12 +1,17 @@
 .container {
+  position: relative;
   .myProfile {
     display: flex;
     justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     .profileImg {
       position: relative;
-      width: 100px;
-      height: 100px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
       border: 2px solid #000;
       margin-bottom: 20px;
@@ -28,14 +33,14 @@
           border-radius: 10px;
           padding: 5px;
           position: absolute;
-          top: 110px;
-          left: 0;
+          top: 220px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 200px;
+          text-align: center;
   
           &:hover {
             opacity: 0.5;
-          }
-  
-          input {
           }
         }
       }
@@ -43,20 +48,71 @@
 
 
     .profileData {
+      align-items: center;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
       .userName {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        p {
+          background-color: #333;
+          border-radius: 20px;
+          color: #fff;
+          padding: 5px;
+          text-align: center;
+        }
         input {
           border: 1px solid #000;
           padding: 5px;
           border-radius: 5px;
           margin-bottom: 10px;
+          width: 200px;
+          height: 30px;
         }
       }
 
       .mailAddress {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        p {
+          background-color: #333;
+          border-radius: 20px;
+          color: #fff;
+          padding: 5px;
+          text-align: center;
+        }
         input {
           border: 1px solid #000;
           padding: 5px;
           border-radius: 5px;
+          margin-bottom: 10px;
+          width: 200px;
+          height: 30px;
+        }
+      }
+      .profileConfirmBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        border: 1px solid #ff7f50;
+        border-radius: 10px;
+        background-color: #fff;
+        color: #ff7f50;
+        padding: 5px;
+        // text-align: center;
+        transition: 0.3s;
+        // 文字の高さが中央になるように、line-heightを追加
+        line-height: 30px;
+
+        &:hover {
+          border: 1px solid #ff7f50;
+          background-color: #ff7f50;
+          color: #fff;
         }
       }
     }

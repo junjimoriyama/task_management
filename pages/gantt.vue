@@ -3,6 +3,7 @@
 // import { useTaskPeriod } from '../composables/taskList'
 import { Cipher } from 'crypto';
 import dayjs, { type Dayjs } from 'dayjs'
+import { changeIsSearch } from '../composables/search'
 
 // tasksheetの項目定義
 const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority, adjustEndDateStr, adjustStartDateStr } = taskDefinition()
@@ -12,31 +13,40 @@ const { taskList } = taskDefinition()
 // sort.tsで定義
 const { sortPriority, sortDay, sortChanged } = getSortValue()
 
-// タスク項目
+// 検索ボックス非表示
+changeIsSearch(false)
+
+// タスク項目の要素
 const taskHeading = ref<HTMLElement>()
+// タスク項目の高さ
 const taskHeadingHeight = ref(0)
-// 
+// 各タスク
 const taskItem = ref<HTMLElement[]>()
+// 各タスク自体の高さ
 const taskItemHeight = ref(0)
 
-
+// 各タスク間のマージン
 const taskItemDistance = 5
 
-// 検索ボックス表示
-changeIsSearch(true)
-
+// コンポーネントがDOMにマウントされたら
 onMounted(() => {
   // 初めにlocalStorageからtaskListに入れる
   taskListPushLocalStorage()
-
+  
   // HTMLが全て更新されてから実行
   nextTick(() => {
+    // チャートを本日の日付に移動させる関数
+    moveChartToday()
+
+    // taskHeadingがありタグにulがあれば
     if(taskHeading.value && taskHeading.value.tagName === 'UL') {
+      // タスクの高さ
       taskHeadingHeight.value = taskHeading.value.clientHeight
     }
+    // taskItemがあり、一番目のタスクのタグにulがあれば
     if(taskItem.value && taskItem.value[0].tagName === 'UL') {
+      // タスクの高さ
       taskItemHeight.value = taskItem.value[0].clientHeight
-      console.log(taskItemHeight.value)
     }
   })
 })
@@ -73,13 +83,17 @@ interface calendar {
   days: eachDay[]; /* (各月の1日ごとの情報) */
 }
 
+// 2年前の年と月を取得
+let twoYearsAgo = dayjs().subtract(2, 'year').format('YYYY-MM')
+
 const dayState = reactive({
-  startMonth: '2023-10',/* 初めの月 */
+  startMonth: twoYearsAgo,/* 2年前の月 */
   endMonth: '2024-1',/* 終わりの月 */
+  today: dayjs().format('YYYY-MM-DD'),/* 今日の日付 */
   blockNumber: 0,/* ブロック数 */
   calendars: [] as calendar[], /* 各月の情報が入る */
-  // monthlyDayList: [] as eachDay[] /* 各月の1日ごとの情報(日付、曜日、ブロック数) */
 })
+
 // 1つのblockあたりのpx
 const BLOCK_SIZE = 30;
 
@@ -105,6 +119,7 @@ const getday = (year: number, month: number, blockNumber: number) => {
   }
   return monthlyDayList
 }
+
 
 // 指定した数ヶ月分の日付と曜日を取得
 const getCalendar = () => {
@@ -153,12 +168,12 @@ const isToday = (date: string) => {
 let startBlock: number
 // 終わりのブロック
 let endBlock: number
+ // チャートスタートの日時
+let chartStartDay = new Date(`${dayState.startMonth}/1`)
 
 // 関数化
-
 const getTaskPeriod = (index: number) => {
-  // チャートスタートの日時
-  const chartStartDay = new Date(`${dayState.startMonth}/1`)
+  
   //  ミリ秒で時間を取得
   const chartStartMillis = chartStartDay.getTime()
 
@@ -176,35 +191,28 @@ const getTaskPeriod = (index: number) => {
   // task初めの日 - チャート初めの日を差し引いた日数 +1 = スタートのブロックの位置
   startBlock = (startDateMillis - chartStartMillis) / (1000 * 3600 * 24)
   endBlock = (endDateMillis - chartStartMillis) / (1000 * 3600 * 24)
-console.log(taskHeadingHeight.value)
   return {
     width: `${(endBlock - startBlock + 1) * BLOCK_SIZE}px`,
     left: `${startBlock * BLOCK_SIZE }px`,
+    // それぞれのタスクの高さとマージンにindexをかける。それにタスクの半分の高さとタスクの項目の高さとそのマージンを加える
     top: `${ (taskItemHeight.value + taskItemDistance) * index + taskItemHeight.value / 2 + taskHeadingHeight.value + taskItemDistance}px`
   }
 }
 
-// 特定のli要素を選択する
+// カレンダーゾーンの要素
+const calendarZorn = ref<HTMLElement>()
 
-// onMounted( () => {
-//   setTimeout(() => {
-//     const taskUlEl = document.querySelectorAll('.taskItem');
-//     console.log(taskUlEl);
-
-//     // 各li要素のY座標を取得する
-//     taskUlEl.forEach(ulEL => {
-//       const taskUlElRect = ulEL.getBoundingClientRect();
-//       const taskUlElY = taskUlElRect.top;
-//       console.log('Y座標:', taskUlElY);
-//     });
-//   }, 0);
-// })
-
-
-
-
-
-// =====================================================
+// チャートを本日の日付に移動させる関数
+const moveChartToday = () => {
+  // 本日の日付からカレンダー初めの日付の日数
+  const daysSinceStart = Math.round((new Date(dayState.today).getTime() - chartStartDay.getTime()) / (1000 * 3600 * 24))
+  // 日付間の横幅
+  const moveScroll = daysSinceStart * BLOCK_SIZE
+  if(calendarZorn.value) {
+    // カレンダーゾーンの要素を日付間の横幅分、右にスクロールされる
+    calendarZorn.value.scrollLeft = moveScroll
+  }
+}
 
 // taskの色を変える ======================================
 const getTaskColor = (status: string) => {
@@ -221,9 +229,6 @@ const getTaskColor = (status: string) => {
 }
 
 // ========================================================
-
-// const blocks = document.querySelectorAll('.block')
-// console.log(blocks)
 
 
 const mousedown = (e: MouseEvent, index: number,) => {
@@ -275,19 +280,6 @@ const mousedown = (e: MouseEvent, index: number,) => {
     statusSortData.value[index].period = taskPeriod.value;
   }
 
-  // 四捨五入する関数
-  const customRound = (n: number) => {
-    // 0より小さければ
-    if (n < 0) {
-      // より小さな数字を返す -0.1なら-1 0.1なら1
-      return Math.floor(n)
-      // 0より大きければ
-    } else if (n > 0) {
-      // より大きな数字を返す -0.1なら0 0.1なら1
-      return Math.ceil(n)
-    }
-  }
-
   // 日付を増減させる関数
   const dateAjust = (moveSize: number) => {
     // 日付をdate型へ
@@ -328,6 +320,7 @@ const mousedown = (e: MouseEvent, index: number,) => {
       const moveXRight = currentX - adjustElRectRight
       adjustBlock = Math.ceil(moveXRight / BLOCK_SIZE)
 
+      
     } else if (isLeft) {
       // 左へ座標移動距離
       const moveXLeft = currentX - adjustElRectLeft
@@ -364,19 +357,18 @@ const onChangeSortDay = (value: string) => {
   changeSortDay(sortDay, sortChanged);
 }
 
-
-// cntrol＋K = 選択した右側を削除
 </script>
-
-
 
 <template>
   <div>
     <div class="container">
-      <Header />
+      <Header @searchForWords="searchForWords"/>
       <Sort @changeSortPriority="onChangeSortPriority" @changeSortDay="onChangeSortDay" />
+      <!-- <div class="calendarRange">
+        
+      </div> -->
       <div class="taskGantt">
-        <div class="taskZorn">
+        <div class="taskZorn" ref="taskZorn">
           <ul class="taskHeading" ref="taskHeading">
             <li class="taskTitle">タイトル</li>
             <li class="taskPIC">担当者</li>
@@ -394,17 +386,16 @@ const onChangeSortDay = (value: string) => {
             <li class="taskStatus">{{ task.status }}</li>
             <li class="taskPriority" :style="{ 'backgroundColor': getPriorityColor(task.priority) }">
               {{ task.priority }}</li>
-            <!-- <li class="block" :style="getTaskPeriod(index)" @mousedown="mousedown($event, index)">
-            </li> -->
           </ul>
         </div>
-        <div class="calendarZorn">
+        <div class="calendarZorn" ref="calendarZorn">
+          <!-- チャート -->
           <ul class="blocks">
             <li class="block" v-for="(task, index) in statusSortData" :key="index" :style="getTaskPeriod(index)" @mousedown="mousedown($event, index)">
             </li>
           </ul>
           <div class="month">
-            <div class="monthItem" v-for="(calendar, index) in dayState.calendars">
+            <div class="monthItem" v-for="(calendar, index) in dayState.calendars" ref="monthItem">
               {{ calendar.date }}
               <div class="day">
                 <div class="dayItem" v-for="(day, index) in calendar.days" :key="index" :class="{
@@ -426,76 +417,4 @@ const onChangeSortDay = (value: string) => {
   </div>
 </template>
 
-<!-- let newEndDateStr: string
-
-// const mousedown = (e: MouseEvent, index: number) => {
-//   // クリックした場所の座標
-//   const clickX = e.clientX
-//   // 伸び縮みさせる要素
-//   const adjustEl = e.target as HTMLElement
-//   // マウスポインターの形を変える
-//   adjustEl.style.cursor = 'ew-resize'
-//   // 伸ばす要素の位置情報
-//   const adjustElRect = adjustEl.getBoundingClientRect();
-//   // 伸ばす要素の左端の座標
-//   const adjustElRectLeft = adjustElRect.left
-//   // 伸ばす要素の右端の座標
-//   const adjustElRectRight = adjustElRect.right
-
-//   const isRight = adjustElRectRight - clickX < 20
-//   const isLeft = adjustElRectLeft - clickX < 20
-
-//   if(isRight) {
-
-//   }else if(isLeft) {
-    
-//   }
-
-//   // チャートサイズを調整する関数
-//   const adjustElSize = (e: MouseEvent) => {
-    
-//     // 現在の座標
-//     const currentX = e.clientX
-//     // 移動した距離
-//     const moveXSize = currentX - adjustElRectRight
-//     // 距離を切り上げブロック数で計算する
-//     const numberOfBlock = Math.ceil(moveXSize / BLOCK_SIZE)
-//     // 伸ばす距離(BLOCK_SIZEごと)
-//     const adjustSize = adjustElRect.width + (numberOfBlock * BLOCK_SIZE)
-//     // 期間の終了日
-//     const adjustEndDate = new Date(taskList.value[index].period.split(' 〜 ')[1])
-//     // 終了日をnumberOfBlockに合わせ1日ずつ増やす
-//     adjustEndDate.setDate(adjustEndDate.getDate() + numberOfBlock);
-    
-//     // -の文字列に変更
-//     newEndDateStr = `${adjustEndDate.getFullYear()}-${String(adjustEndDate.getMonth() + 1).padStart(2, '0')}-${String(adjustEndDate.getDate()).padStart(2, '0')}`;
-
-//     // BLOCK_SIZEを１つ分は確保
-//     if (adjustSize >= BLOCK_SIZE) {
-//       // チャートの幅を変更
-//       adjustEl.style.width = `${adjustSize}px`
-//     } else if (adjustSize < BLOCK_SIZE){
-//       console.log('a')
-//     }
-//   }
-
-  
-//   // 要素の右側20px範囲内をclickすると
-//   if (isRight) {
-    
-//     window.addEventListener('mousemove', adjustElSize)
-//     const mouseupEvent = () => {
-//       // taskPeriodEnd.value = adjustEndDateStr
-//       adjustEndDateStr(newEndDateStr);
-//       // HTMLのstatusSortDataに反映させる
-//       statusSortData.value[index].period = taskPeriod.value
-//       // ポインターの変更
-//       adjustEl.style.cursor = 'pointer'
-//       window.removeEventListener('mousemove', adjustElSize)
-//       window.removeEventListener('mouseup', mouseupEvent)
-//     }
-//     window.addEventListener('mouseup', mouseupEvent )
-//   } else if (isLeft) {
-
-//   }
-// } -->
+<!-- control＋K = 選択した右側を削除 -->
