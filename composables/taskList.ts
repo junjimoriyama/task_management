@@ -10,17 +10,18 @@ export type TaskList = {
 	PIC: string,
 	status: string,
 	priority: string,
-	member: string
+	member: string[]
 	// color: string
 }
 
 type TaskListKey = keyof TaskList;
 
+// メンバー
+// export const membersList = ref<string[]>([])
 
 const todays = new Date()
 
-const years = todays.getFullYear()
-console.log(todays.getDate())
+// const years = todays.getFullYear()
 
 // tasksheetの項目定義
 export function taskDefinition() {
@@ -51,7 +52,7 @@ const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toStri
 	})
 	const taskStatus = ref('todo')
 	const taskPriority = ref('低')
-	const taskMember = ref('名無し')
+	const taskMember = ref<string[]>([])
 
 	// 期間始まりのデータを書き換えるメソッド
 	const adjustStartDateStr = (newStartDate: string) => {

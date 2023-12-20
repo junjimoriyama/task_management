@@ -8,7 +8,7 @@ export class TaskSheetClass {
 		public PIC: string,
 		public status: string,
 		public priority: string,
-		public member: string,
+		public member: string[],
 		// public label?: string
 	) { }
 }

@@ -1,4 +1,4 @@
-import { TaskList } from './taskList'
+import type { TaskList } from './taskList'
 
 const { taskList } = taskDefinition()
 
@@ -12,7 +12,7 @@ export const changeIsSearch = (display: boolean) => {
 }
 
 // 検索ワード(v-model)
-export const searchWord = ref('森山')
+export const searchWord = ref('')
 
 // 検索機能でヒットしたtask
 // export const searchHitTaskList = ref<TaskList[]>(taskList.value)

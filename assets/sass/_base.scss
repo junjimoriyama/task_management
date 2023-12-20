@@ -1,8 +1,17 @@
+:root {
+	--area-width: 300px;
+	--sheet-Member-width: 200px
+}
+
 body {
 	font-family: "a-otf-jun-pro", sans-serif;
 	font-weight: 300;
 	font-style: normal;
 	font-size: 13px;
+
+	select {
+		outline: none;
+	}
 
 	.container {
 		position: relative;

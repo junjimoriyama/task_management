@@ -80,10 +80,8 @@ const onImgChange = (changeEvent: Event) => {
         <div class="profileData">
           <div class="userName">
             <p>名前</p>
-            
             <input type="text" v-model="myName"
             >
-            <!-- @input="changeProfileName($event)"  -->
           </div>
           <div class="mailAddress">
             <p>メールアドレス</p>

@@ -1,12 +1,9 @@
 <script setup lang='ts'>
-// import { Sort } from '../components/Sort';
-// import { useTaskPeriod } from '../composables/taskList'
-import { Cipher } from 'crypto';
 import dayjs, { type Dayjs } from 'dayjs'
 import { changeIsSearch } from '../composables/search'
 
 // tasksheetの項目定義
-const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority, adjustEndDateStr, adjustStartDateStr } = taskDefinition()
+const { taskPeriod, adjustEndDateStr, adjustStartDateStr } = taskDefinition()
 // taskList
 const { taskList } = taskDefinition()
 
@@ -85,10 +82,12 @@ interface calendar {
 
 // 2年前の年と月を取得
 let twoYearsAgo = dayjs().subtract(2, 'year').format('YYYY-MM')
+// 1年後の年と月を取得
+let oneYearsLater = dayjs().add(1, 'year').format('YYYY-MM')
 
 const dayState = reactive({
   startMonth: twoYearsAgo,/* 2年前の月 */
-  endMonth: '2024-1',/* 終わりの月 */
+  endMonth: oneYearsLater,/* 終わりの月 */
   today: dayjs().format('YYYY-MM-DD'),/* 今日の日付 */
   blockNumber: 0,/* ブロック数 */
   calendars: [] as calendar[], /* 各月の情報が入る */

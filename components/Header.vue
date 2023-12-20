@@ -34,6 +34,12 @@ const uploadedImg = localStorage.getItem('uploadedImg')
 						<div class="fa-solid fa-user"></div>
 					</nuxt-link>
 				</div>
+				<!-- メンバー -->
+				<div class="member">
+					<nuxt-link to="/member">
+						<div class="fa-solid fa-people-group"></div>
+					</nuxt-link>
+				</div>
 				<div class="search" v-if="isShowSearch">
 					<input type="text" placeholder="検索" v-model="searchWord">
 					<!-- キーワード検索 -->

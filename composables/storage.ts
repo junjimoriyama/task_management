@@ -1,6 +1,8 @@
 // import { STORAGE_TASKLIST } from './storage';
-import { TaskList } from './taskList'
+import type { TaskList } from './taskList'
 import { profileName, profileEmail} from './profile'
+// メンバー
+// import { memberList} from './member'
 import { useStorage } from '@vueuse/core'
 const { taskList } = taskDefinition()
 // localStorageのkey
@@ -25,6 +27,19 @@ export const taskListPushLocalStorage = () => {
     localStorageData
   }
 }
+
+// メンバー 一覧
+export const STORAGE_MEMBERS = 'members'
+// メンバーのローカルストレージ
+export const useMember = useStorage(STORAGE_MEMBERS, [''])
+
+// 役割 一覧
+export const STORAGE_ROLE = 'role'
+export const useRole = useStorage(STORAGE_ROLE, [''])
+
+export const  STORAGE_SELECTED_ROLE = 'memberRoles'
+export const useMemberRoles: Ref<Record<string, string[]>> = ref({})
+
 
 
 // プロフィール用storage

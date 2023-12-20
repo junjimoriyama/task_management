@@ -1,7 +1,7 @@
 // import { TaskList } from './../class/taskSheet';
 
 // tasksheetの項目定義
-const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority } = taskDefinition()
+// const { taskTitle, taskDescription, taskPIC, taskPeriodStart, taskPeriodEnd, taskPeriod, taskStatus, taskPriority } = taskDefinition()
 
 const { taskList } = taskDefinition()
 
