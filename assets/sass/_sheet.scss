@@ -6,6 +6,7 @@
 	width: max(300px, 50vh);
 	height: 600px;
 	background-color: #fff;
+	border: 2px solid #000;
 	border-radius: 20px;
 	display: grid;
 	place-items: center;
@@ -37,6 +38,19 @@
 			margin-bottom: 30px;
 		}
 
+		.inputID {
+			display: grid;
+			place-items: center;
+			width: 40px;
+			height: 40px;
+			font-size: 16px;
+			margin-bottom: 20px;
+			background-color: #333;
+			color: #fff;
+			border-radius: 50%;
+			padding: 10px;
+		}
+
 		.taskTitle,
 		.taskDescription,
 		.taskPIC {
@@ -44,22 +58,29 @@
 		}
 
 		.taskPeriod {
+			display: grid;
+			place-items: center;
 			width: 100%;
-			height: 40px;
+			height: 50px;
 			display: flex;
 			justify-content: center;
-			gap: 50px;
+			gap: 20px;
 			margin-bottom: 20px;
 
 			.taskPeriodStart,
 			.taskPeriodEnd {
+				height: 40px;
+				padding: 5px 10px;
 				border: 2px solid #000;
 				border-radius: 10px;
 			}
 		}
 
 		.taskStatus {
+			text-align: center; 
 			select {
+				width: 100px;
+				height: 40px;
 				border: 2px solid #000;
 				border-radius: 10px;
 				padding: 5px;
@@ -69,6 +90,8 @@
 
 		.priority {
 			select {
+				width: 100px;
+				height: 40px;
 				border: 2px solid #000;
 				border-radius: 10px;
 				padding: 5px;
@@ -171,109 +194,4 @@
 	background-color: #000;
 	opacity: 0.3;
 	z-index: 1;
-}
-
-.roleModal {
-	font-size: 16px;
-	width: 300px;
-	height: 400px;
-	background-color: #fff;
-	border-radius: 10px;
-	text-align: center;
-	padding: 30px 20px 20px 20px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 4;
-
-
-	.title {
-		background-color: darkgoldenrod;
-		color: #fff;
-		margin-bottom: 20px;
-		display: inline-block;
-		padding: 10px;
-		border-radius: 10px;
-	}
-
-	.roleMember {
-		margin-bottom: 10px;
-	}
-
-	.roleModalWrap {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		height: 100%;
-
-		.closeSheet {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-
-			.fa-rectangle-xmark {
-				font-size: 30px;
-				cursor: pointer;
-			}
-		}
-
-		.roleList {
-			border: 2px solid #999;
-			padding: 10px;
-			border-radius: 10px;
-			margin-bottom: 10px;
-			width: 100%;
-			height: 200px;
-			overflow-y: scroll;
-			
-			li {
-				display: flex;
-				justify-content: space-between;
-				opacity: 0.3s;
-				width: 100%;
-				padding: 5px;
-				border-radius: 5px;
-
-				&:hover {
-					background-color: #f5f5f5;
-				}
-
-				.roleListCheck {
-					width: 18px;
-					height: 18px;
-					margin-right: 5px;
-					accent-color: #555;
-				}
-			}
-		}
-
-		.roleDecisionBtn {
-			position: absolute;
-			right: 10px;
-			bottom: 10px;
-			font-size: 12px;
-			width: 50px;
-			background-color: #333;
-			color: #fff;
-			padding: 10px;
-			border-radius: 10px;
-			align-self: end;
-			cursor: pointer;
-		}
-	}
-}
-
-.roleModalMask {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #000;
-	opacity: 0.3;
-	z-index: 3;
-
 }

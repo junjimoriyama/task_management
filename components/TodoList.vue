@@ -192,12 +192,23 @@ const deleteTask = () => {
 	deleteComfirm.value = false
 }
 
+// taskの削除実行
+const deleteComfirmModalClose = () => {
+	// モーダル消す
+	deleteComfirm.value = false
+	currentSelectedTaskID.value = null
+}
+
 </script>
 
 <!--mouseupした時の状態で判定でする -->
 <template>
 	<div class="deleteComfirmMask" v-show="deleteComfirm"></div>
 	<div class="deleteComfirmModal" v-show="deleteComfirm">
+	<div 
+	class="deleteComfirmModalCloseBtn"
+	@click="deleteComfirmModalClose()"
+	>閉じる</div>
 		<p>本当に削除しますか？</p>
 		<button class="taskDeleteBtn" @click="deleteTask()">削除</button>
 	</div>
@@ -216,10 +227,10 @@ const deleteTask = () => {
 					{{ task.title }}
 				</div>
 				<div class="taskDescription">
-					{{ task.description }}
+					内容 :{{ task.description }}
 				</div>
 				<div class="taskPeriod">
-					{{ task.period }}
+					期間 :{{ task.period }}
 				</div>
 				<div class="taskPIC">
 					担当者 : {{ task.PIC }}
@@ -238,12 +249,3 @@ const deleteTask = () => {
 			</li>
 		</transition-group>
 </template>
-
-<!-- 
-・todo、進行中、完了の３つの状況がある
-・それぞれ区別できるようにする必要あり
-・作ったタスクシートをそれぞれの領域に分けて表示するには？
-
--->
-
-<!-- :style="{ backgroundColor: getPriorityColor(task.priority) }" -->

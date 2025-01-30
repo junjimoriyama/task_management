@@ -4,18 +4,12 @@
 	display: flex;
 	gap: 10px;
 
-	.sortPriority {
+	.sortPriority, .sortDay {
 		border: 2px solid #000;
 		border-radius: 10px;
 		padding: 10px;
 		background-color: #F7F7F7;
-	}
-
-	.sortDay {
-		border: 2px solid #000;
-		border-radius: 10px;
-		padding: 10px;
-		background-color: #F7F7F7;
+		font-size: 16px;
 	}
 }
 
@@ -69,7 +63,7 @@
 @mixin eachTask {
 	display: flex;
 	flex-direction: column;
-	gap: 5px;
+	gap: 20px;
 	position: relative;
 	width: 100%;
 	height: auto;
@@ -79,6 +73,7 @@
 	border-radius: 20px;
 	cursor: pointer;
 	user-select: none;
+	font-size: 16px;
 
 	.taskID {
 		text-align: center;
@@ -111,7 +106,7 @@
 		right: 10px;
 
 		.taskModifyIcon {
-			font-size: 24px;
+			font-size: 35px;
 		}
 
 		.taskModifyMenu {

@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { profileName, profileEmail, profileDataChange } from '../composables/profile'
+
+import { profileDataChange } from '../composables/profile'
 import { useProfileName } from '../composables/storage'
 
 
-// プロフィール画像呼び出し
+// プロフィール画像、名前をlocalStorageより取得
 onMounted(() => {
   imgUrl.value = localStorage.getItem('uploadedImg') || '';
+  myName.value = localStorage.getItem("profileName") || "";
 })
 
 // 検索ボックス非表示
@@ -19,6 +21,7 @@ const doProfileDataChange = () => {
   profileDataChange(myName.value)
   useProfileName.value = myName.value
 }
+
 
 // =======================================
 
@@ -83,12 +86,10 @@ const onImgChange = (changeEvent: Event) => {
         <div class="profileData">
           <div class="userName">
             <p>名前</p>
-            <input type="text" v-model="myName"
+            <input 
+            type="text" 
+            v-model="myName"
             >
-          </div>
-          <div class="mailAddress">
-            <p>メールアドレス</p>
-            <input type="email">
           </div>
           <button class="profileConfirmBtn"
           @click="doProfileDataChange"

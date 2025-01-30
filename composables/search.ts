@@ -27,6 +27,7 @@ export const searchForWords = (word: string): TaskList[] => {
   if (word) {
     // 検索ボックスに何か文字が入力されている場合
     return taskList.value.filter((task) => {
+      // 中身を返す必要がある
       return (
         task.title?.includes(word) ||
         task.description?.includes(word) ||

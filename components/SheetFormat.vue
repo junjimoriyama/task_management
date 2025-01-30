@@ -152,65 +152,8 @@ const roleDecision = () => {
 					<option value="低">優先度「低」</option>
 				</select>
 			</div>
-			<!-- メンバー -->
-			<!-- <input class="taskMember" type="text" v-model="taskMember" placeholder="メンバー"> -->
-			<!-- <div class="taskMember">
-				<p>メンバー</p>
-				<ul class="taskMemberList">
-					<li v-for="(member, index) in taskMember" :key="index" @click="openRoleModal(index)">
-						{{ member }}
-						<li v-for="role in useMemberRoles[member]" :key="role">
-							{{ role }}
-						</li>
-						<div class="fa-solid fa-xmark" @click="deleteTaskMember(index)"></div>
-						<ul>
-						</ul>
-					</li>
-				</ul>
-
-				<div class="addMemberForm">
-					<div class="newMemberListWrap">
-						<select class="newMemberList" v-model="selectNewMember">
-							<option disabled value="">メンバーを選択</option>
-							<option v-for="member in useMember" :value="member" :disabled="taskMember.includes(member)">
-								{{ member }}
-							</option>
-
-						</select>
-						<div class="fa-solid fa-caret-down"></div>
-					</div>
-					<button class="sheetAddMemberBtn" @click="sheetAddMember">追加</button>
-				</div>
-			</div> -->
 			<button class="addTaskSaveBtn" @click="addTaskSave">保存
 			</button>
 		</div>
-	</div>
-	<div class="taskUnderMask"></div>
-
-	<!-- 役割モーダル -->
-	<!-- <div class="roleModal" v-show="isRoleModal">
-		<div class="roleModalWrap">
-			<div class="closeSheet" v-if="isShowAddModal">
-				<div class="fa-regular fa-rectangle-xmark" @click="closeRoleModal"></div>
-			</div>
-			<p class="title">役割 一覧</p>
-
-			<p class="selectedMember"> {{ selectedMember }}さん</p>
-
-			<ul class="roleList">
-				<li v-for="(role, index) in useRole" :key="role">
-					<label>
-						<input type="checkbox" class="roleListCheck" v-model="checkedRoles[index]">
-						{{ role }}
-					</label>
-					<div class="fa-solid fa-xmark" @click="deleteRole(index)">
-					</div>
-				</li>
-			</ul>
-			<button class="roleDecisionBtn" @click="roleDecision">決定</button>
-		</div>
-	</div> -->
-	<div class="roleModalMask" v-show="isRoleModal">
 	</div>
 </template>
