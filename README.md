@@ -1,74 +1,47 @@
-メモ
-- a
-- b
-```html
-<p>test</p>
-```
-```js
-const 
-```
+# README
 
+<img width="500" alt="github_todo" src="https://github.com/user-attachments/assets/82d31e60-a870-42dc-a6cd-4fd1381a5ad9" />
 
-# Nuxt 3 Minimal Starter
+### URL: task-management-lake-nine.vercel.app
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+### 📋 todoリスト作成、管理ツール
+<br>
 
-## Setup
+## 概要
 
-Make sure to install the dependencies:
+### todoページ
 
-```bash
-# npm
-npm install
+ToDo → 進行中 → 完了の3つのステータスでタスクを管理できます。
 
-# pnpm
-pnpm install
+各タスクの状態はドラッグ＆ドロップで簡単に変更できます。
 
-# yarn
-yarn install
-```
+さらに、タスクの文字検索や優先度、日付順などで並び替えが可能です。
 
-## Development Server
+<br>
 
-Start the development server on `http://localhost:3000`:
+### カレンダーページ
 
-```bash
-# npm
-npm run dev
+タスクの登録日や期限をカレンダーで一覧表示できます。。
 
-# pnpm
-pnpm run dev
+また、カレンダー上でタスクをドラッグ＆ドロップして日付を変更することも可能です。
 
-# yarn
-yarn dev
-```
+<br>
 
-## Production
+### アカウントページ
 
-Build the application for production:
+認証機能はありませんが、プロフィール画像や名前を自由に設定できます。
 
-```bash
-# npm
-npm run build
+設定したプロフィールはすべてのページで常時表示されます。
 
-# pnpm
-pnpm run build
+<br>
 
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 使用技術
+| カテゴリー　　            | 技術　　　　　　　　　　　　　　　　　　　　　　　　　　   |
+|---------------------|------------------- |
+| **Frontend**       | Next.js(14.1.3), TypeScript  |
+| **State Management**　| Redux              |
+| **Infrastructure** | Vercel     　　　　　 |
+| **Database**       | supabase            |
+| **Design**         | Illustrator         |
+| **Editor**         | VSCode              |
+<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,react,next,redux,vercel,supabase,illustrator,svg,vscode,github" />
