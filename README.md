@@ -2,7 +2,7 @@
 
 <img width="500" alt="github_todo" src="https://github.com/user-attachments/assets/82d31e60-a870-42dc-a6cd-4fd1381a5ad9" />
 
-### URL: task-management-lake-nine.vercel.app
+### URL: https://task-management-lake-nine.vercel.app
 
 ### 📋 todoリスト作成、管理ツール
 <br>
