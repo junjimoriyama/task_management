@@ -16,12 +16,8 @@ export type TaskList = {
 
 type TaskListKey = keyof TaskList;
 
-// メンバー
-// export const membersList = ref<string[]>([])
-
+// 本日
 const todays = new Date()
-
-// const years = todays.getFullYear()
 
 // tasksheetの項目定義
 export function taskDefinition() {

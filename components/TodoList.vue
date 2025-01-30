@@ -6,15 +6,14 @@ import { useSharedEditTaskMode, getPriorityColor } from '../composables/taskStat
 // import { priorityOrder, getSortValue } from '../composables/sort'
 import { searchWord, searchForWords } from '../composables/search'
 
-
+// 編集
 const { editTaskMode, currentSelectedTaskID } = useSharedEditTaskMode()
 
-// taskListと
+// taskList
 const { taskList, changeTaskListData } = taskDefinition()
 
 // 並べ替え
 const { sortPriority } = getSortValue()
-
 
 
 // 編集、削除メニュー表示
@@ -39,7 +38,6 @@ const editTask = (index: number) => {
 	// 編集モードへ
 	editTaskMode(true, currentSelectedTaskID.value)
 	
-
 }
 
 // index.vueよりtodo,進行中、完了などの文字列が渡されている
@@ -54,9 +52,11 @@ const searchResultTaskID = ref<number[]>([])
 watch(searchWord, () => {
 	// キーワードで絞ったタスクのIDを取得
 	searchResultTaskID.value = searchForWords(searchWord.value).map(task => task.id);
+	console.log(searchResultTaskID.value)
 });
 
 
+// 並べ替え
 const sortData = taskList.value.sort((a, b) => {
 	if (sortPriority.value === 'toLow') {
 		return priorityOrder.indexOf(b.priority) - priorityOrder.indexOf(a.priority)
@@ -71,8 +71,6 @@ const sortData = taskList.value.sort((a, b) => {
 	// number型を返す
 	return priorityDifference
 })
-
-
 
 // taskマウスで移動　=================================
 // mouseEventで移動させる要素
@@ -126,7 +124,7 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 		// TodoArea,progressionArea,completionArea取得
 		const taskStatusElements = document.querySelectorAll('.TodoTaskLineup')
 		//indexと距離を入れる空の配列を用意
-		const areaElDistanceArrey: { index: number, distance: number }[] = []
+		const areaElDistanceArray: { index: number, distance: number }[] = []
 		// 上記要素の左端からの距離取得
 		let moveDistance: number
 		taskStatusElements.forEach((areaEl, index) => {
@@ -143,10 +141,10 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 				distance: moveDistance
 			}
 			// 配列の中でindexと距離を入れる
-			areaElDistanceArrey.push(areaElDistanceObj)
+			areaElDistanceArray.push(areaElDistanceObj)
 		})
 		// 移動した要素の距離が一番近い(数字の小さい)index(エリア)を出す
-		const closestIndex = areaElDistanceArrey.reduce((prev, current) => {
+		const closestIndex = areaElDistanceArray.reduce((prev, current) => {
 			// 基準を0として絶対値を比べる
 			return Math.abs(current.distance) < Math.abs(prev.distance) ? current : prev
 		}).index
@@ -174,12 +172,10 @@ const mousedown = (downEvent: MouseEvent, index: number) => {
 	parentElement.style.cursor = 'pointer'
 }
 
-
 // task削除モーダル表示非表示
 const deleteComfirm = ref(false)
-
+// 削除するインデックス
 const  deleteIndex = ref(0)
-
 
 // taskの削除のモーダル
 const onDeleteTaskModal = (index: number) => {
@@ -227,9 +223,6 @@ const deleteTask = () => {
 				</div>
 				<div class="taskPIC">
 					担当者 : {{ task.PIC }}
-				</div>
-				<div class="taskMember">
-					メンバー : {{ task.member.join('、')}}
 				</div>
 				<div class="taskPriority" :style="{ 'backgroundColor': getPriorityColor(task.priority) }">{{ task.priority }}
 				</div>

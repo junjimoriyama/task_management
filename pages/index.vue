@@ -70,7 +70,7 @@ const onChangeSortDay = (value: string) => {
 									{{ taskStatusLength('Todo') }}
 								</span>
 							</div>
-							<div class="fa-solid fa-ellipsis"></div>
+							<div class="fa-solid"></div>
 						</div>
 						<div class="taskMenu" @click="addTask('Todo')">
 							<div class="addTaskBtn fa-regular fa-square-plus">
@@ -86,7 +86,7 @@ const onChangeSortDay = (value: string) => {
 									{{ taskStatusLength('進行中') }}
 								</span>
 							</div>
-							<div class="fa-solid fa-ellipsis"></div>
+							<div class="fa-solid"></div>
 						</div>
 						<div class="taskMenu" @click="addTask('進行中')">
 							<div class="addTaskBtn fa-regular fa-square-plus">
@@ -101,7 +101,7 @@ const onChangeSortDay = (value: string) => {
 									{{ taskStatusLength('完了') }}
 								</span>
 							</div>
-							<div class="fa-solid fa-ellipsis"></div>
+							<div class="fa-solid"></div>
 						</div>
 						<div class="taskMenu" @click="addTask('完了')">
 							<div class="addTaskBtn fa-regular fa-square-plus">

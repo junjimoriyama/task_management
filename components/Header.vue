@@ -12,7 +12,7 @@ const uploadedImg = localStorage.getItem('uploadedImg')
 	<div>
 		<header>
 			<div class="headerWrap">
-				<div class="profileImg">
+				<div class="profileImg" v-if="uploadedImg">
 					<img :src="uploadedImg" alt="アカウント">
 				</div>
 				<div class="myName">
@@ -35,11 +35,11 @@ const uploadedImg = localStorage.getItem('uploadedImg')
 					</nuxt-link>
 				</div>
 				<!-- メンバー -->
-				<div class="member">
+				<!-- <div class="member">
 					<nuxt-link to="/member">
 						<div class="fa-solid fa-people-group"></div>
 					</nuxt-link>
-				</div>
+				</div> -->
 				<div class="search" v-if="isShowSearch">
 					<input type="text" placeholder="検索" v-model="searchWord">
 					<!-- キーワード検索 -->

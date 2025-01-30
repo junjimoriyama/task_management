@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<!-- <script setup lang='ts'>
 // ストレージ
 import { STORAGE_MEMBERS, useMember } from '../composables/storage'
 // メンバー
@@ -180,4 +180,4 @@ const toggleRoleInput = () => {
       </div>
     </div>
   </div>
-</template>
+</template> -->

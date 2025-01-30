@@ -21,8 +21,6 @@ const props = defineProps([
 ]);
 taskStatus.value = props.addStatus
 
-// taskPriority.value = props.addStatus
-
 const maxId = ref(1)
 if (taskList.value.length > 0) {
 	const ids = taskList.value.map(task => task.id)
@@ -32,23 +30,6 @@ if (taskList.value.length > 0) {
 } else {
 	maxId.value
 }
-
-// <select>で選ばれたメンバー
-const selectNewMember = ref('')
-// <select>で選ばれたメンバーを追加
-const sheetAddMember = () => {
-	if (!taskMember.value.includes(selectNewMember.value)) {
-		taskMember.value.push(selectNewMember.value)
-	}
-}
-
-// タスクメンバー削除
-const deleteTaskMember = (index: number) => {
-	taskMember.value.splice(index, 1)
-}
-
-// newMemberList.value.push(taskMember.value)
-
 // 選択しているタスクを定義(オブジェクト)
 const selectEditTask = taskList.value.find(task => task.id === currentSelectedTaskID.value)
 
@@ -67,7 +48,6 @@ if (selectEditTask) {
 	taskMember.value = selectEditTask.member
 }
 
-
 // 保存ボタン押した場合
 function addTaskSave() {
 	// 編集モードでない場合(新しいデータを追加)
@@ -84,7 +64,6 @@ function addTaskSave() {
 			taskMember.value
 		)
 		taskList.value.push(newTask)
-		console.log(taskList.value)
 		// 編集モードの場合(選択しているデータを変更)
 	} else {
 
@@ -121,48 +100,16 @@ const selectedMember = ref('')
 // チェックが付いた役割
 const checkedRoles = ref([])
 
-// 役割のモーダル開く
-const openRoleModal = (index: number) => {
-	// モーダル表示
-	isRoleModal.value = true
-	// 選ばれた人を表示
-	selectedMember.value = taskMember.value[index]
-}
-// 役割モーダル閉じる
-const closeRoleModal = () => {
-	// 役割モーダル非表示
-	isRoleModal.value = false
-	// 選ばれた人を非表示
-	selectedMember.value = ''
-}
-
 // 選択した人と役割を保存するオブジェクト
 // const memberRoles: Ref<Record<string, string[]>> = ref({})
 const checkedFilterRole = ref([''])
-// const selectedselectedMember = ref([''])
 // 役割決定
 const roleDecision = () => {
 	// 選択した役割
 	checkedFilterRole.value = useRole.value.filter((role, index) => checkedRoles.value[index])
 	useMemberRoles.value[selectedMember.value] = checkedFilterRole.value
-	// 
-	// useMemberRoles.value[selectedMember.value] = 
-	// // 役割
-	// checkedFilterRole.value
-	// console.log(useMemberRoles.value)
-	// console.log(useMemberRoles.value[selectedMember.value])
-	// モーダル閉じる
 	isRoleModal.value = false
 }
-
-
-
-// 役割を削除する
-const deleteRole = (index: number) => {
-	useRole.value.splice(index, 1)
-}
-
-
 </script>
 
 <template>
@@ -207,10 +154,9 @@ const deleteRole = (index: number) => {
 			</div>
 			<!-- メンバー -->
 			<!-- <input class="taskMember" type="text" v-model="taskMember" placeholder="メンバー"> -->
-			<div class="taskMember">
+			<!-- <div class="taskMember">
 				<p>メンバー</p>
 				<ul class="taskMemberList">
-					<!-- メンバー表示 -->
 					<li v-for="(member, index) in taskMember" :key="index" @click="openRoleModal(index)">
 						{{ member }}
 						<li v-for="role in useMemberRoles[member]" :key="role">
@@ -225,29 +171,25 @@ const deleteRole = (index: number) => {
 				<div class="addMemberForm">
 					<div class="newMemberListWrap">
 						<select class="newMemberList" v-model="selectNewMember">
-							<!-- @change="selectedNewMember($event)" -->
 							<option disabled value="">メンバーを選択</option>
-							<!-- taskMemberはクラスで定義 -->
 							<option v-for="member in useMember" :value="member" :disabled="taskMember.includes(member)">
 								{{ member }}
 							</option>
 
 						</select>
 						<div class="fa-solid fa-caret-down"></div>
-						<!-- pointerEvents: noneにしてselectが反応するようにする -->
 					</div>
 					<button class="sheetAddMemberBtn" @click="sheetAddMember">追加</button>
 				</div>
-			</div>
+			</div> -->
 			<button class="addTaskSaveBtn" @click="addTaskSave">保存
 			</button>
-			{{ checkedFilterRole }}
 		</div>
 	</div>
 	<div class="taskUnderMask"></div>
 
 	<!-- 役割モーダル -->
-	<div class="roleModal" v-show="isRoleModal">
+	<!-- <div class="roleModal" v-show="isRoleModal">
 		<div class="roleModalWrap">
 			<div class="closeSheet" v-if="isShowAddModal">
 				<div class="fa-regular fa-rectangle-xmark" @click="closeRoleModal"></div>
@@ -266,10 +208,9 @@ const deleteRole = (index: number) => {
 					</div>
 				</li>
 			</ul>
-			<!-- 役割決定ボタン -->
 			<button class="roleDecisionBtn" @click="roleDecision">決定</button>
 		</div>
-	</div>
+	</div> -->
 	<div class="roleModalMask" v-show="isRoleModal">
 	</div>
 </template>

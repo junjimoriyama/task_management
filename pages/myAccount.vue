@@ -20,7 +20,6 @@ const doProfileDataChange = () => {
   useProfileName.value = myName.value
 }
 
-
 // =======================================
 
 // 画像をアップロードする
@@ -55,7 +54,6 @@ const onImgChange = (changeEvent: Event) => {
     }
      // 指定されたファイルをURL形式で読み込む
     reader.readAsDataURL(profileImg)
-    
   }
 }
 </script>
@@ -63,10 +61,15 @@ const onImgChange = (changeEvent: Event) => {
 <template>
   <div>
     <div class="container">
-      <Header/>
+      <Header />
       <div class="myProfile">
         <div class="profileImg" @click="imgUpload">
-          <img v-if="imgUrl" class="imgDisplay" :src="imgUrl" alt="profileImg">
+          <template v-if="imgUrl">
+            <img class="imgDisplay" :src="imgUrl" alt="profileImg">
+          </template>
+          <template v-else>
+            <i class="fas fa-user fa-5x defaultIcon"></i>
+          </template>
           
           <div class="imgUpload" v-show="isImgUpload">
             <label for="imgUploadBtn">
