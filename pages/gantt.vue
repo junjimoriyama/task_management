@@ -362,10 +362,6 @@ const onChangeSortDay = (value: string) => {
   <div>
     <div class="container">
       <Header @searchForWords="searchForWords"/>
-      <Sort @changeSortPriority="onChangeSortPriority" @changeSortDay="onChangeSortDay" />
-      <!-- <div class="calendarRange">
-        
-      </div> -->
       <div class="taskGantt">
         <div class="taskZorn" ref="taskZorn">
           <ul class="taskHeading" ref="taskHeading">
