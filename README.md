@@ -40,7 +40,6 @@ ToDo → 進行中 → 完了の3つのステータスでタスクを管理で�
 |---------------------|------------------- |
 | **Frontend**       | Nuxt.js(3.7.4), TypeScript  |
 | **Infrastructure** | Vercel     　　　　　 |
-| **Design**         | Illustrator         |
 | **Editor**         | VSCode              |
 
-<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,vue,nuxt,redux,vercel,illustrator,svg,vscode,github" />
+<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,vue,nuxt,vercel,illustrator,svg,vscode,github" />
