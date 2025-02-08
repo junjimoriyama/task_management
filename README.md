@@ -42,4 +42,4 @@ ToDo → 進行中 → 完了の3つのステータスでタスクを管理で�
 | **Infrastructure** | Vercel     　　　　　 |
 | **Editor**         | VSCode              |
 
-<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,vue,nuxt,vercel,vscode,github" />
+<img alt="my skills" src="https://skillicons.dev/icons?theme=dark&perline=7&i=html,css,scss,ts,vue,nuxt,vercel,vite,vscode,github" />
